@@ -226,10 +226,13 @@ function App() {
           
           <h3>Special Actions</h3>
           <ul>
-            <li><strong>Double Down:</strong> Double your bet and take exactly one more card</li>
-            <li><strong>Split:</strong> Split pairs into two separate hands</li>
-            <li><strong>Surrender:</strong> Give up half your bet and end the hand</li>
-            <li><strong>Insurance:</strong> Side bet against dealer blackjack</li>
+            <li><strong>Double Down:</strong> Double your bet and take exactly one more card. Available only on your first two cards. Best with totals of 9, 10, or 11, especially when the dealer shows a weak card (2-6). You cannot hit after doubling down.</li>
+            
+            <li><strong>Split:</strong> When you have a pair, you can split them into two separate hands by placing an equal bet. Each hand is played independently. Always split Aces and 8s. Never split 10s, 5s, or 4s. You can usually split up to 3 times (4 hands total).</li>
+            
+            <li><strong>Surrender:</strong> Give up half your bet and end the hand early. Available only on your first two cards. Use when you have a weak hand (like 15 or 16) against a strong dealer card (9, 10, or Ace). This reduces your losses compared to playing out a likely losing hand.</li>
+            
+            <li><strong>Insurance:</strong> A side bet offered when the dealer shows an Ace. You bet half your original bet that the dealer has blackjack. If the dealer has blackjack, insurance pays 2:1, but you lose your original bet. If not, you lose the insurance bet but continue with your original hand. Generally not recommended due to high house edge.</li>
           </ul>
           
           <h3>Winning</h3>
