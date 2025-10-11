@@ -49,7 +49,7 @@ export function placeBet(gameState: GameState, betAmount: number): GameState {
     phase: 'dealing',
     isGameActive: true,
     lastHandWinnings: undefined,
-    previousBalance: undefined,
+    previousBalance: gameState.playerScore, // Store balance before bet is deducted
   };
 }
 
@@ -546,6 +546,7 @@ function splitHand(gameState: GameState): GameState {
     canSplit: false, // Can't split again (simplified for now)
     canSurrender: false, // Can't surrender after split
     canTakeInsurance: false,
+    // Keep the original previousBalance from when the bet was placed
   };
 }
 
@@ -633,7 +634,7 @@ export function playDealerHand(gameState: GameState): GameState {
       phase: 'game-over',
       result: primaryResult,
       lastHandWinnings: netWinnings,
-      previousBalance: gameState.playerScore,
+      // previousBalance is already set when bet was placed
     };
   } else {
     // Normal (non-split) game
@@ -651,7 +652,7 @@ export function playDealerHand(gameState: GameState): GameState {
       phase: 'game-over',
       result,
       lastHandWinnings: netWinnings,
-      previousBalance: gameState.playerScore,
+      // previousBalance is already set when bet was placed
     };
   }
 }

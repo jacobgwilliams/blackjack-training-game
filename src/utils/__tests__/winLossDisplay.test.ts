@@ -42,7 +42,7 @@ describe('Win/Loss Display Feature', () => {
     
     // Check that win/loss tracking is working
     expect(gameState.lastHandWinnings).toBe(50); // 100 total return - 50 bet = 50 net profit
-    expect(gameState.previousBalance).toBe(950); // 1000 - 50 bet = 950
+    expect(gameState.previousBalance).toBe(1000); // Original balance before bet was placed
     expect(gameState.playerScore).toBe(1050); // 950 + 100 total return = 1050
     expect(gameState.phase).toBe('game-over');
   });
@@ -112,8 +112,8 @@ describe('Win/Loss Display Feature', () => {
     
     // Check that win/loss tracking is working for split hands
     expect(gameState.lastHandWinnings).toBe(0); // First hand: 100 return - 50 bet = 50 profit, Second hand: 0 return - 50 bet = -50 loss, Net: 50 - 50 = 0
-    expect(gameState.previousBalance).toBe(950); // Balance before dealer play (after first bet, before split)
-    expect(gameState.playerScore).toBe(1050); // 950 + 100 total return = 1050
+    expect(gameState.previousBalance).toBe(1000); // Original balance before any bets were placed
+    expect(gameState.playerScore).toBe(1050); // 950 + 100 total return = 1050 (balance before dealer play was 950)
     expect(gameState.phase).toBe('game-over');
   });
   
@@ -135,7 +135,7 @@ describe('Win/Loss Display Feature', () => {
     
     // Check that win/loss tracking is cleared
     expect(gameState.lastHandWinnings).toBeUndefined();
-    expect(gameState.previousBalance).toBeUndefined();
+    expect(gameState.previousBalance).toBe(1050); // Set to current balance when placing new bet
     expect(gameState.phase).toBe('dealing');
   });
 });
