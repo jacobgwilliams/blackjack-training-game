@@ -87,6 +87,9 @@ const generateHardTotalScenarios = (): DrillScenario[] => {
           ...calculateHand(cards)
         };
         
+        // Skip if this accidentally became a soft hand
+        if (hand.isSoft) continue;
+        
         // Generate dealer upcard
         const dealerUpcard = getRandomCard();
         
@@ -123,6 +126,9 @@ const generateSoftTotalScenarios = (): DrillScenario[] => {
         cards: [aceCard, secondCardObj],
         ...calculateHand([aceCard, secondCardObj])
       };
+      
+      // Skip if this somehow isn't soft
+      if (!hand.isSoft) continue;
       
       // Generate dealer upcard
       const dealerUpcard = getRandomCard();
