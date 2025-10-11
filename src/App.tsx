@@ -238,7 +238,15 @@ function App() {
             <li>Receive two cards face up</li>
             <li>Dealer gets one card face up, one face down</li>
             <li>Hit to take another card, or Stand to keep your hand</li>
-            <li>Dealer must hit on 16, stand on 17</li>
+          </ul>
+          
+          <h3>Dealer Rules</h3>
+          <p>The dealer has no choices - they must follow fixed rules:</p>
+          <ul>
+            <li><strong>Must Hit on 16 or less:</strong> The dealer is required to take another card when their total is 16 or lower</li>
+            <li><strong>Must Stand on 17 or higher:</strong> The dealer must stop taking cards once they reach 17 or more</li>
+            <li><strong>Hits on Soft 17:</strong> If the dealer has a soft 17 (Ace counting as 11 + 6), they must take another card</li>
+            <li>This is why weak dealer cards (4, 5, 6) give you an advantage - the dealer is more likely to bust when forced to hit</li>
           </ul>
           
           <h3>Special Actions</h3>
