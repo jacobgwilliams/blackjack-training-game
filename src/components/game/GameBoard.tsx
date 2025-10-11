@@ -86,12 +86,47 @@ export function GameBoard({
           showTotal={gameState.phase === 'game-over' || gameState.phase === 'dealer-turn'}
         />
         
-        <Hand
-          hand={gameState.playerHand}
-          title="Player"
-          isDealer={false}
-          showTotal={true}
-        />
+        {gameState.isSplit ? (
+          <div className="split-hands-container">
+            {gameState.splitHands.map((splitHand, index) => (
+              <div
+                key={index}
+                className={`split-hand-wrapper ${
+                  index === gameState.activeSplitHandIndex && gameState.phase === 'player-turn'
+                    ? 'active-hand'
+                    : ''
+                } ${splitHand.isComplete ? 'completed-hand' : ''}`}
+              >
+                <Hand
+                  hand={splitHand.hand}
+                  title={`Hand ${index + 1}${
+                    index === gameState.activeSplitHandIndex && gameState.phase === 'player-turn'
+                      ? ' (Active)'
+                      : ''
+                  }`}
+                  isDealer={false}
+                  showTotal={true}
+                />
+                {splitHand.result && (
+                  <div className={`split-hand-result result-${splitHand.result}`}>
+                    {splitHand.result === 'player-wins' && '✓ Win'}
+                    {splitHand.result === 'dealer-wins' && '✗ Lose'}
+                    {splitHand.result === 'push' && '= Push'}
+                    {splitHand.result === 'player-blackjack' && '★ Blackjack!'}
+                  </div>
+                )}
+                <div className="split-hand-bet">Bet: ${splitHand.bet}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Hand
+            hand={gameState.playerHand}
+            title="Player"
+            isDealer={false}
+            showTotal={true}
+          />
+        )}
       </div>
       
       {showStrategyHints && canMakePlayerAction && strategy.primaryRecommendation && (

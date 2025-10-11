@@ -20,6 +20,9 @@ export function initializeGame(deck: Card[], startingBalance: number, preserveBa
     canTakeInsurance: false,
     result: null,
     isGameActive: false,
+    isSplit: false,
+    splitHands: [],
+    activeSplitHandIndex: 0,
   };
 }
 
@@ -118,32 +121,108 @@ function hitPlayer(gameState: GameState): GameState {
   
   let newPhase: GamePhase = 'player-turn';
   let result: GameResult | null = null;
+  let newGameState = { ...gameState };
   
-  if (newPlayerHand.isBusted) {
-    newPhase = 'game-over';
-    result = 'dealer-wins';
+  if (gameState.isSplit) {
+    // Handle hit for split hands
+    const newSplitHands = [...gameState.splitHands];
+    const activeIndex = gameState.activeSplitHandIndex;
+    
+    newSplitHands[activeIndex] = {
+      ...newSplitHands[activeIndex],
+      hand: newPlayerHand,
+    };
+    
+    // If hand busted, mark it complete and move to next hand
+    if (newPlayerHand.isBusted) {
+      newSplitHands[activeIndex].isComplete = true;
+      newSplitHands[activeIndex].result = 'dealer-wins';
+      
+      // Move to next hand or dealer turn
+      if (activeIndex < newSplitHands.length - 1) {
+        const nextIndex = activeIndex + 1;
+        newGameState = {
+          ...newGameState,
+          playerHand: newSplitHands[nextIndex].hand,
+          activeSplitHandIndex: nextIndex,
+          canDoubleDown: true, // Can double on next hand
+        };
+      } else {
+        // All hands complete, move to dealer turn or game over
+        const allHandsBusted = newSplitHands.every(h => h.hand.isBusted);
+        newPhase = allHandsBusted ? 'game-over' : 'dealer-turn';
+      }
+    }
+    
+    newGameState = {
+      ...newGameState,
+      deck: remainingDeck,
+      playerHand: newPlayerHand,
+      splitHands: newSplitHands,
+      canDoubleDown: false, // Can't double after hitting
+      canSplit: false,
+      canSurrender: false,
+      phase: newPhase,
+      result,
+    };
+  } else {
+    // Normal hit (non-split)
+    if (newPlayerHand.isBusted) {
+      newPhase = 'game-over';
+      result = 'dealer-wins';
+    }
+    
+    newGameState = {
+      ...gameState,
+      deck: remainingDeck,
+      playerHand: newPlayerHand,
+      canDoubleDown: false,
+      canSplit: false,
+      canSurrender: false,
+      phase: newPhase,
+      result,
+    };
   }
   
-  return {
-    ...gameState,
-    deck: remainingDeck,
-    playerHand: newPlayerHand,
-    canDoubleDown: false,
-    canSplit: false,
-    canSurrender: false,
-    phase: newPhase,
-    result,
-  };
+  return newGameState;
 }
 
 /**
  * Player stands (ends their turn)
  */
 function standPlayer(gameState: GameState): GameState {
-  return {
-    ...gameState,
-    phase: 'dealer-turn',
-  };
+  if (gameState.isSplit) {
+    // Mark current hand as complete
+    const newSplitHands = [...gameState.splitHands];
+    const activeIndex = gameState.activeSplitHandIndex;
+    newSplitHands[activeIndex].isComplete = true;
+    
+    // Move to next hand or dealer turn
+    if (activeIndex < newSplitHands.length - 1) {
+      const nextIndex = activeIndex + 1;
+      return {
+        ...gameState,
+        splitHands: newSplitHands,
+        playerHand: newSplitHands[nextIndex].hand,
+        activeSplitHandIndex: nextIndex,
+        canDoubleDown: true, // Can double on next hand
+        canSurrender: false,
+      };
+    } else {
+      // All hands complete, move to dealer turn
+      return {
+        ...gameState,
+        splitHands: newSplitHands,
+        phase: 'dealer-turn',
+      };
+    }
+  } else {
+    // Normal stand (non-split)
+    return {
+      ...gameState,
+      phase: 'dealer-turn',
+    };
+  }
 }
 
 /**
@@ -190,23 +269,63 @@ function splitHand(gameState: GameState): GameState {
     throw new Error('Cannot split hand');
   }
   
-  // For now, implement basic split logic
-  // In a full implementation, this would handle multiple hands
-  const { card, remainingDeck } = dealCard(gameState.deck);
-  const newPlayerHand = addCardToHand(gameState.playerHand, card);
+  if (gameState.playerScore < gameState.currentBet) {
+    throw new Error('Insufficient funds to split');
+  }
   
-  const newBet = gameState.currentBet * 2;
-  const newScore = gameState.playerScore - gameState.currentBet;
+  // Split the two cards into separate hands
+  const card1 = gameState.playerHand.cards[0];
+  const card2 = gameState.playerHand.cards[1];
+  
+  // Create first hand with first card
+  let hand1 = createEmptyHand();
+  hand1 = addCardToHand(hand1, card1);
+  
+  // Create second hand with second card
+  let hand2 = createEmptyHand();
+  hand2 = addCardToHand(hand2, card2);
+  
+  // Deal one card to each hand
+  let { card: newCard1, remainingDeck: deck1 } = dealCard(gameState.deck);
+  hand1 = addCardToHand(hand1, newCard1);
+  
+  let { card: newCard2, remainingDeck: deck2 } = dealCard(deck1);
+  hand2 = addCardToHand(hand2, newCard2);
+  
+  // Deduct additional bet for second hand
+  const newPlayerScore = gameState.playerScore - gameState.currentBet;
+  
+  // Create split hand states
+  const splitHands = [
+    {
+      hand: hand1,
+      bet: gameState.currentBet,
+      isComplete: false,
+      result: null,
+    },
+    {
+      hand: hand2,
+      bet: gameState.currentBet,
+      isComplete: false,
+      result: null,
+    },
+  ];
+  
+  // Check if first hand is blackjack (but only counts as 21 after split)
+  const firstHandBusted = hand1.isBusted;
   
   return {
     ...gameState,
-    deck: remainingDeck,
-    playerHand: newPlayerHand,
-    currentBet: newBet,
-    playerScore: newScore,
-    canDoubleDown: false,
-    canSplit: false,
-    canSurrender: false,
+    deck: deck2,
+    playerHand: hand1, // Display first hand as the main hand
+    playerScore: newPlayerScore,
+    isSplit: true,
+    splitHands,
+    activeSplitHandIndex: 0,
+    canDoubleDown: !firstHandBusted, // Can double on split hands (unless busted)
+    canSplit: false, // Can't split again (simplified for now)
+    canSurrender: false, // Can't surrender after split
+    canTakeInsurance: false,
   };
 }
 
@@ -260,17 +379,49 @@ export function playDealerHand(gameState: GameState): GameState {
     dealerHand = addCardToHand(dealerHand, card);
   }
   
-  const result = determineGameResult(gameState.playerHand, dealerHand);
-  const winnings = calculateWinnings(gameState.currentBet, result);
-  
-  return {
-    ...gameState,
-    deck: newDeck,
-    dealerHand,
-    playerScore: gameState.playerScore + winnings,
-    phase: 'game-over',
-    result,
-  };
+  if (gameState.isSplit) {
+    // Calculate results for each split hand
+    const newSplitHands = gameState.splitHands.map(splitHand => {
+      const result = determineGameResult(splitHand.hand, dealerHand);
+      const winnings = calculateWinnings(splitHand.bet, result);
+      return {
+        ...splitHand,
+        result,
+        isComplete: true,
+      };
+    });
+    
+    // Calculate total winnings from all hands
+    const totalWinnings = newSplitHands.reduce((total, splitHand) => {
+      return total + calculateWinnings(splitHand.bet, splitHand.result!);
+    }, 0);
+    
+    // Use the first hand's result as the main result for statistics
+    const primaryResult = newSplitHands[0].result!;
+    
+    return {
+      ...gameState,
+      deck: newDeck,
+      dealerHand,
+      splitHands: newSplitHands,
+      playerScore: gameState.playerScore + totalWinnings,
+      phase: 'game-over',
+      result: primaryResult,
+    };
+  } else {
+    // Normal (non-split) game
+    const result = determineGameResult(gameState.playerHand, dealerHand);
+    const winnings = calculateWinnings(gameState.currentBet, result);
+    
+    return {
+      ...gameState,
+      deck: newDeck,
+      dealerHand,
+      playerScore: gameState.playerScore + winnings,
+      phase: 'game-over',
+      result,
+    };
+  }
 }
 
 /**

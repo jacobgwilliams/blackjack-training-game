@@ -24,6 +24,13 @@ export type GameResult =
   | 'player-blackjack' 
   | 'dealer-blackjack';
 
+export interface SplitHandState {
+  hand: Hand;
+  bet: number;
+  isComplete: boolean;
+  result: GameResult | null;
+}
+
 export interface GameState {
   phase: GamePhase;
   deck: Deck;
@@ -37,6 +44,10 @@ export interface GameState {
   canTakeInsurance: boolean;
   result: GameResult | null;
   isGameActive: boolean;
+  // Split-specific state
+  isSplit: boolean;
+  splitHands: SplitHandState[];
+  activeSplitHandIndex: number;
 }
 
 export interface GameSettings {
