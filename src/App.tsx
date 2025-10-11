@@ -581,16 +581,21 @@ function App() {
         <div className="about-content">
           <h3>What This Is All About</h3>
           <p>
-            I built this app because I wanted to help people actually understand blackjack 
-            instead of just winging it at the casino. You know how it is - you sit down 
-            at a table, get dealt some cards, and suddenly you're making decisions that 
-            could cost you money without really knowing why.
+            I built this app because I wanted a tool I could use to practice blackjack 
+            fundamentals myself. You know how it is - you sit down at a table, get dealt 
+            some cards, and suddenly you're making decisions that could cost you money 
+            without really knowing why. I got tired of winging it.
           </p>
           <p>
-            This tool teaches you the patterns that exist in blackjack and helps you build 
+            This tool teaches the patterns that exist in blackjack and helps build 
             confidence so when you're in a real casino setting, you're not just guessing. 
             It's like having a patient teacher who never gets tired of explaining the same 
             concept over and over.
+          </p>
+          <p>
+            I built this as much for me as anyone else - I just wanted to share it to see 
+            if folks thought it was useful. It's a self-service tool that I use regularly 
+            to keep my own skills sharp.
           </p>
           
           <h3>What You'll Actually Learn</h3>
