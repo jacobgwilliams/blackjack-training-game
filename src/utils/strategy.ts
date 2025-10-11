@@ -8,7 +8,10 @@ import { Hand, Card } from '../types/card';
 // Hard totals strategy table [playerTotal][dealerUpcard]
 const HARD_TOTALS_STRATEGY: (PlayerAction | 'H' | 'S')[][] = [
   // Dealer upcard: A, 2, 3, 4, 5, 6, 7, 8, 9, 10
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 5-8
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 5
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 6
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 7
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 8
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 9
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 10
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 11
@@ -147,6 +150,26 @@ export function getBasicStrategyRecommendation(
   
   // Check hard totals
   const hardIndex = Math.min(playerHand.total - 5, HARD_TOTALS_STRATEGY.length - 1);
+  
+  // Ensure indices are within bounds
+  if (hardIndex < 0 || hardIndex >= HARD_TOTALS_STRATEGY.length) {
+    return {
+      action: 'stand',
+      confidence: 50,
+      reasoning: `Invalid hand total: ${playerHand.total}`,
+      expectedValue: 0,
+    };
+  }
+  
+  if (dealerIndex < 0 || dealerIndex >= HARD_TOTALS_STRATEGY[hardIndex].length) {
+    return {
+      action: 'stand',
+      confidence: 50,
+      reasoning: `Invalid dealer upcard: ${dealerUpcard.rank}`,
+      expectedValue: 0,
+    };
+  }
+  
   const action = HARD_TOTALS_STRATEGY[hardIndex][dealerIndex];
   
   if (action === 'H') {
