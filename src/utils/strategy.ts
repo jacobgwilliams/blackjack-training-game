@@ -219,20 +219,22 @@ export function getDoubleDownRecommendation(
   const dealerValue = getDealerUpcardValue(dealerUpcard);
   
   // Hard totals that should double down
+  // Note: dealer values are INDICES (0=A, 1=2, 2=3, 3=4, 4=5, 5=6, 6=7, 7=8, 8=9, 9=10)
   const hardDoubleDowns = [
-    [9, 3, 4, 5, 6], // 9 vs 3-6
-    [10, 2, 3, 4, 5, 6, 7, 8, 9], // 10 vs 2-9
-    [11, 2, 3, 4, 5, 6, 7, 8, 9, 10], // 11 vs 2-10
+    [9, 2, 3, 4, 5], // 9 vs 3-6 (indices 2,3,4,5)
+    [10, 1, 2, 3, 4, 5, 6, 7, 8], // 10 vs 2-9 (indices 1-8)
+    [11, 1, 2, 3, 4, 5, 6, 7, 8, 9], // 11 vs 2-10 (indices 1-9)
   ];
   
   // Soft totals that should double down
+  // Note: dealer values are INDICES (0=A, 1=2, 2=3, 3=4, 4=5, 5=6, 6=7, 7=8, 8=9, 9=10)
   const softDoubleDowns = [
-    [13, 5, 6], // A,2 vs 5-6
-    [14, 5, 6], // A,3 vs 5-6
-    [15, 4, 5, 6], // A,4 vs 4-6
-    [16, 4, 5, 6], // A,5 vs 4-6
-    [17, 3, 4, 5, 6], // A,6 vs 3-6
-    [18, 2, 3, 4, 5, 6], // A,7 vs 2-6
+    [13, 4, 5], // A,2 vs 5-6 (indices 4,5)
+    [14, 4, 5], // A,3 vs 5-6 (indices 4,5)
+    [15, 3, 4, 5], // A,4 vs 4-6 (indices 3,4,5)
+    [16, 3, 4, 5], // A,5 vs 4-6 (indices 3,4,5)
+    [17, 2, 3, 4, 5], // A,6 vs 3-6 (indices 2,3,4,5)
+    [18, 1, 2, 3, 4, 5], // A,7 vs 2-6 (indices 1,2,3,4,5)
   ];
   
   // Check hard totals
