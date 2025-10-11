@@ -6,7 +6,7 @@ import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
 /**
  * Initializes a new game state
  */
-export function initializeGame(deck: Card[], startingBalance: number, preserveBalance?: boolean): GameState {
+export function initializeGame(deck: Card[], startingBalance: number, shoeSize: number, preserveBalance?: boolean): GameState {
   return {
     phase: 'betting',
     deck,
@@ -23,6 +23,8 @@ export function initializeGame(deck: Card[], startingBalance: number, preserveBa
     isSplit: false,
     splitHands: [],
     activeSplitHandIndex: 0,
+    shoeSize,
+    showShuffleNotification: false,
   };
 }
 

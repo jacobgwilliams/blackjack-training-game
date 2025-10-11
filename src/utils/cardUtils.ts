@@ -74,6 +74,16 @@ export function dealCard(deck: Deck): { card: Card; remainingDeck: Deck } {
 }
 
 /**
+ * Checks if the deck needs to be reshuffled
+ * Reshuffles when fewer than 15% of cards remain (typical casino practice)
+ */
+export function needsReshuffle(deck: Deck, originalShoeSize: number): boolean {
+  const totalCards = originalShoeSize * 52; // Each deck has 52 cards
+  const reshuffleThreshold = Math.floor(totalCards * 0.15);
+  return deck.length <= reshuffleThreshold;
+}
+
+/**
  * Creates an empty hand
  */
 export function createEmptyHand(): Hand {

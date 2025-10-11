@@ -372,8 +372,12 @@ function App() {
           </div>
           
           <h3>Training/Debug Options</h3>
-          <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginBottom: '1rem' }}>
+          <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginBottom: '0.5rem' }}>
             Force specific scenarios to practice optimal play. Select one option at a time:
+          </p>
+          <p style={{ fontSize: '0.75rem', color: '#ef4444', marginBottom: '1rem', fontStyle: 'italic' }}>
+            ⚠️ Note: Practice modes search through the shoe for specific cards, which affects card order and counts.
+            Use Normal Play mode for realistic gameplay.
           </p>
           
           <div className="setting-item">

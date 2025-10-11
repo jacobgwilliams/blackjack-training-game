@@ -10,7 +10,7 @@ describe('Split Functionality', () => {
   beforeEach(() => {
     // Create a controlled deck for predictable testing
     deck = shuffleDeck(createShoe(6));
-    gameState = initializeGame(deck, 1000);
+    gameState = initializeGame(deck, 1000, 6);
     gameState = placeBet(gameState, 100);
   });
 

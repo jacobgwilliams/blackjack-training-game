@@ -30,7 +30,7 @@ describe('gameLogic', () => {
 
   describe('initializeGame', () => {
     it('should initialize game with correct starting state', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       
       expect(gameState.phase).toBe('betting');
       expect(gameState.playerScore).toBe(1000);
@@ -44,7 +44,7 @@ describe('gameLogic', () => {
 
   describe('placeBet', () => {
     it('should place bet and update game state', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const newState = placeBet(gameState, 50);
       
       expect(newState.currentBet).toBe(50);
@@ -54,7 +54,7 @@ describe('gameLogic', () => {
     });
 
     it('should throw error for insufficient funds', () => {
-      const gameState = initializeGame(mockDeck, 100);
+      const gameState = initializeGame(mockDeck, 100, 6);
       
       expect(() => placeBet(gameState, 150)).toThrow('Insufficient funds');
     });
@@ -62,7 +62,7 @@ describe('gameLogic', () => {
 
   describe('dealInitialCards', () => {
     it('should deal two cards to player and dealer', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const betState = placeBet(gameState, 50);
       const dealtState = dealInitialCards(betState);
       
@@ -73,7 +73,7 @@ describe('gameLogic', () => {
     });
 
     it('should set correct action availability flags', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const betState = placeBet(gameState, 50);
       const dealtState = dealInitialCards(betState);
       
@@ -87,7 +87,7 @@ describe('gameLogic', () => {
     let gameState: GameState;
 
     beforeEach(() => {
-      const initState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const initState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const betState = placeBet(initState, 50);
       gameState = dealInitialCards(betState);
     });
@@ -174,7 +174,7 @@ describe('gameLogic', () => {
 
   describe('playDealerHand', () => {
     it('should play dealer hand according to rules', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const betState = placeBet(gameState, 50);
       const dealtState = dealInitialCards(betState);
       const standState = executePlayerAction(dealtState, 'stand');
@@ -188,7 +188,7 @@ describe('gameLogic', () => {
 
   describe('resetGame', () => {
     it('should reset game state for new round', () => {
-      const gameState = initializeGame(mockDeck, mockSettings.startingBalance);
+      const gameState = initializeGame(mockDeck, mockSettings.startingBalance, 6);
       const betState = placeBet(gameState, 50);
       const dealtState = dealInitialCards(betState);
       const resetState = resetGame(dealtState);

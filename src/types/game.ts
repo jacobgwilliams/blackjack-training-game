@@ -48,6 +48,9 @@ export interface GameState {
   isSplit: boolean;
   splitHands: SplitHandState[];
   activeSplitHandIndex: number;
+  // Shoe management
+  showShuffleNotification?: boolean;
+  shoeSize: number; // Track current shoe size for reshuffling
 }
 
 export type DebugScenario = 'none' | 'double-down' | 'hit' | 'stand' | 'split';

@@ -26,8 +26,9 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
   switch (action.type) {
     case 'INITIALIZE_GAME': {
       const { settings, preserveBalance } = action.payload;
-      const deck = shuffleDeck(createShoe(settings.shoeSize || settings.deckCount));
-      return initializeGame(deck, state.playerScore, preserveBalance);
+      const shoeSize = settings.shoeSize || settings.deckCount;
+      const deck = shuffleDeck(createShoe(shoeSize));
+      return initializeGame(deck, state.playerScore, shoeSize, preserveBalance);
     }
     
     case 'PLACE_BET': {
@@ -98,6 +99,11 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
     canTakeInsurance: false,
     result: null,
     isGameActive: false,
+    isSplit: false,
+    splitHands: [],
+    activeSplitHandIndex: 0,
+    shoeSize: initialSettings.shoeSize || 6,
+    showShuffleNotification: false,
   });
   
   // Save balance to localStorage whenever it changes
