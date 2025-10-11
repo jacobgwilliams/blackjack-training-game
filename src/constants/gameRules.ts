@@ -5,6 +5,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
   minBet: 10,
   maxBet: 500,
   deckCount: 6,
+  shoeSize: 6, // Standard 6-deck shoe
   allowSurrender: true,
   allowInsurance: true,
   dealerHitsSoft17: false,

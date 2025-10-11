@@ -16,7 +16,7 @@ import { loadBalance, saveBalance, loadStatistics, saveStatistics, clearBalance 
 type GameStateAction = 
   | { type: 'INITIALIZE_GAME'; payload: { settings: GameSettings; preserveBalance?: boolean } }
   | { type: 'PLACE_BET'; payload: { betAmount: number } }
-  | { type: 'DEAL_INITIAL_CARDS'; payload: { debugMode?: { enabled: boolean; forceSplitHands?: boolean } } }
+  | { type: 'DEAL_INITIAL_CARDS'; payload: { debugMode?: { enabled: boolean; scenario?: 'none' | 'double-down' | 'hit' | 'stand' | 'split' } } }
   | { type: 'EXECUTE_PLAYER_ACTION'; payload: { action: PlayerAction } }
   | { type: 'PLAY_DEALER_HAND' }
   | { type: 'RESET_GAME' }
@@ -26,7 +26,7 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
   switch (action.type) {
     case 'INITIALIZE_GAME': {
       const { settings, preserveBalance } = action.payload;
-      const deck = shuffleDeck(createShoe(settings.deckCount));
+      const deck = shuffleDeck(createShoe(settings.shoeSize || settings.deckCount));
       return initializeGame(deck, state.playerScore, preserveBalance);
     }
     
@@ -61,10 +61,10 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
 export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTINGS) {
   const [settings, setSettings] = useState<GameSettings>(initialSettings);
   
-  // Update settings when initialSettings changes (e.g., debug mode toggle)
+  // Update settings when initialSettings changes (e.g., debug mode toggle, shoe size)
   useEffect(() => {
     setSettings(initialSettings);
-  }, [initialSettings.debugMode?.enabled, initialSettings.debugMode?.forceSplitHands]);
+  }, [initialSettings.debugMode?.enabled, initialSettings.debugMode?.scenario, initialSettings.shoeSize]);
   
   // Load saved balance from localStorage, fallback to default
   const savedBalance = loadBalance();

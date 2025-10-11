@@ -335,11 +335,28 @@
   cursor: pointer;
 }
 
-.setting-label input[type="checkbox"] {
+.setting-label input[type="checkbox"],
+.setting-label input[type="radio"] {
   margin-top: 0.25rem;
   width: 1.25rem;
   height: 1.25rem;
   cursor: pointer;
+}
+
+.setting-select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.setting-select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 .setting-text {
@@ -366,6 +383,12 @@
   
   .setting-item {
     background: rgba(31, 41, 55, 0.5);
+  }
+  
+  .setting-select {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
   }
   
   .setting-text strong {

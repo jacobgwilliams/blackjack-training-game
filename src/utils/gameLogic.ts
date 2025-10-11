@@ -50,56 +50,145 @@ export function placeBet(gameState: GameState, betAmount: number): GameState {
 /**
  * Deals initial cards to player and dealer
  */
-export function dealInitialCards(gameState: GameState, debugMode?: { enabled: boolean; forceSplitHands?: boolean }): GameState {
+export function dealInitialCards(gameState: GameState, debugMode?: { enabled: boolean; scenario?: 'none' | 'double-down' | 'hit' | 'stand' | 'split' }): GameState {
   let newDeck = gameState.deck;
   let playerHand = gameState.playerHand;
   let dealerHand = gameState.dealerHand;
   
-  // Debug mode: force a split opportunity
-  if (debugMode?.enabled && debugMode?.forceSplitHands) {
-    // Find two cards with the same rank in the deck for testing
+  // Debug mode: force specific scenarios
+  if (debugMode?.enabled && debugMode?.scenario && debugMode.scenario !== 'none') {
     const deckCopy = [...newDeck];
     
-    // Find first card with rank 8, 9, or 10 (good split candidates)
-    const goodRanks = ['8', '9', '10', 'J', 'Q', 'K'];
-    const firstCardIndex = deckCopy.findIndex(card => goodRanks.includes(card.rank));
-    
-    if (firstCardIndex >= 0) {
-      const firstCard = deckCopy[firstCardIndex];
-      deckCopy.splice(firstCardIndex, 1);
-      
-      // Find a matching rank
-      const secondCardIndex = deckCopy.findIndex(card => card.rank === firstCard.rank);
-      
-      if (secondCardIndex >= 0) {
-        const secondCard = deckCopy[secondCardIndex];
-        deckCopy.splice(secondCardIndex, 1);
+    switch (debugMode.scenario) {
+      case 'split': {
+        // Force a split opportunity (pair of 8s, 9s, or 10s)
+        const goodRanks = ['8', '9', '10', 'J', 'Q', 'K'];
+        const firstCardIndex = deckCopy.findIndex(card => goodRanks.includes(card.rank));
         
-        // Add the pair to player hand
-        playerHand = addCardToHand(playerHand, firstCard);
-        playerHand = addCardToHand(playerHand, secondCard);
+        if (firstCardIndex >= 0) {
+          const firstCard = deckCopy[firstCardIndex];
+          deckCopy.splice(firstCardIndex, 1);
+          const secondCardIndex = deckCopy.findIndex(card => card.rank === firstCard.rank);
+          
+          if (secondCardIndex >= 0) {
+            const secondCard = deckCopy[secondCardIndex];
+            deckCopy.splice(secondCardIndex, 1);
+            playerHand = addCardToHand(playerHand, firstCard);
+            playerHand = addCardToHand(playerHand, secondCard);
+            
+            // Deal dealer cards normally
+            for (let i = 0; i < 2; i++) {
+              const { card } = dealCard(deckCopy);
+              deckCopy.splice(0, 1);
+              dealerHand = addCardToHand(dealerHand, card);
+            }
+            newDeck = deckCopy;
+          }
+        }
+        break;
+      }
+      
+      case 'double-down': {
+        // Force a double down opportunity (player gets 9, 10, or 11)
+        const findCard = (rank: string) => deckCopy.findIndex(card => card.rank === rank);
+        const card1Index = findCard('5');
+        const card2Index = findCard('6');
         
-        // Deal dealer cards normally
-        for (let i = 0; i < 2; i++) {
-          const { card, remainingDeck } = dealCard(deckCopy);
+        if (card1Index >= 0 && card2Index >= 0) {
+          const card1 = deckCopy[card1Index];
+          deckCopy.splice(card1Index, 1);
+          const card2 = deckCopy[card2Index < card1Index ? card2Index : card2Index - 1];
+          deckCopy.splice(card2Index < card1Index ? card2Index : card2Index - 1, 1);
+          
+          playerHand = addCardToHand(playerHand, card1);
+          playerHand = addCardToHand(playerHand, card2);
+          
+          // Give dealer a weak card (5 or 6)
+          const dealerCard1Index = deckCopy.findIndex(card => card.rank === '5' || card.rank === '6');
+          if (dealerCard1Index >= 0) {
+            const dealerCard1 = deckCopy[dealerCard1Index];
+            deckCopy.splice(dealerCard1Index, 1);
+            dealerHand = addCardToHand(dealerHand, dealerCard1);
+          }
+          
+          const { card } = dealCard(deckCopy);
           deckCopy.splice(0, 1);
           dealerHand = addCardToHand(dealerHand, card);
+          newDeck = deckCopy;
         }
+        break;
+      }
+      
+      case 'hit': {
+        // Force a hit scenario (player gets 12-16, dealer shows strong card)
+        const findCard = (rank: string) => deckCopy.findIndex(card => card.rank === rank);
+        const card1Index = findCard('10');
+        const card2Index = findCard('4');
         
-        newDeck = deckCopy;
-      } else {
-        // Fallback to normal dealing if no match found
-        for (let i = 0; i < 2; i++) {
-          const { card, remainingDeck } = dealCard(newDeck);
-          newDeck = remainingDeck;
-          playerHand = addCardToHand(playerHand, card);
-        }
-        
-        for (let i = 0; i < 2; i++) {
-          const { card, remainingDeck } = dealCard(newDeck);
-          newDeck = remainingDeck;
+        if (card1Index >= 0 && card2Index >= 0) {
+          const card1 = deckCopy[card1Index];
+          deckCopy.splice(card1Index, 1);
+          const card2 = deckCopy[card2Index < card1Index ? card2Index : card2Index - 1];
+          deckCopy.splice(card2Index < card1Index ? card2Index : card2Index - 1, 1);
+          
+          playerHand = addCardToHand(playerHand, card1);
+          playerHand = addCardToHand(playerHand, card2);
+          
+          // Give dealer a strong card (10 or A)
+          const dealerCard1Index = deckCopy.findIndex(card => card.rank === '10' || card.rank === 'A');
+          if (dealerCard1Index >= 0) {
+            const dealerCard1 = deckCopy[dealerCard1Index];
+            deckCopy.splice(dealerCard1Index, 1);
+            dealerHand = addCardToHand(dealerHand, dealerCard1);
+          }
+          
+          const { card } = dealCard(deckCopy);
+          deckCopy.splice(0, 1);
           dealerHand = addCardToHand(dealerHand, card);
+          newDeck = deckCopy;
         }
+        break;
+      }
+      
+      case 'stand': {
+        // Force a stand scenario (player gets 17-20)
+        const findCard = (rank: string) => deckCopy.findIndex(card => card.rank === rank);
+        const card1Index = findCard('10');
+        const card2Index = findCard('8');
+        
+        if (card1Index >= 0 && card2Index >= 0) {
+          const card1 = deckCopy[card1Index];
+          deckCopy.splice(card1Index, 1);
+          const card2 = deckCopy[card2Index < card1Index ? card2Index : card2Index - 1];
+          deckCopy.splice(card2Index < card1Index ? card2Index : card2Index - 1, 1);
+          
+          playerHand = addCardToHand(playerHand, card1);
+          playerHand = addCardToHand(playerHand, card2);
+          
+          // Deal dealer cards normally
+          for (let i = 0; i < 2; i++) {
+            const { card } = dealCard(deckCopy);
+            deckCopy.splice(0, 1);
+            dealerHand = addCardToHand(dealerHand, card);
+          }
+          newDeck = deckCopy;
+        }
+        break;
+      }
+    }
+    
+    // If debug scenario setup failed, fall through to normal dealing
+    if (playerHand.cards.length === 0) {
+      for (let i = 0; i < 2; i++) {
+        const { card, remainingDeck } = dealCard(newDeck);
+        newDeck = remainingDeck;
+        playerHand = addCardToHand(playerHand, card);
+      }
+      
+      for (let i = 0; i < 2; i++) {
+        const { card, remainingDeck } = dealCard(newDeck);
+        newDeck = remainingDeck;
+        dealerHand = addCardToHand(dealerHand, card);
       }
     }
   } else {

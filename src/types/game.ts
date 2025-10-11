@@ -50,11 +50,14 @@ export interface GameState {
   activeSplitHandIndex: number;
 }
 
+export type DebugScenario = 'none' | 'double-down' | 'hit' | 'stand' | 'split';
+
 export interface GameSettings {
   startingBalance: number;
   minBet: number;
   maxBet: number;
   deckCount: number;
+  shoeSize: number; // Number of decks in the shoe (1-8)
   allowSurrender: boolean;
   allowInsurance: boolean;
   dealerHitsSoft17: boolean;
@@ -62,7 +65,7 @@ export interface GameSettings {
   resplitAces: boolean;
   debugMode?: {
     enabled: boolean;
-    forceSplitHands?: boolean;
+    scenario?: DebugScenario;
   };
 }
 

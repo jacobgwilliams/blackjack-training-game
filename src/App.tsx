@@ -21,16 +21,18 @@ function App() {
   const [showStrategyHints, setShowStrategyHints] = useState(true);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
-  const [debugSplitMode, setDebugSplitMode] = useState(false);
+  const [debugScenario, setDebugScenario] = useState<'none' | 'double-down' | 'hit' | 'stand' | 'split'>('none');
+  const [shoeSize, setShoeSize] = useState<number>(6);
   
-  // Apply debug mode to settings (memoized to avoid unnecessary recreations)
+  // Apply settings (memoized to avoid unnecessary recreations)
   const gameSettings = useMemo(() => ({
     ...DEFAULT_GAME_SETTINGS,
+    shoeSize,
     debugMode: {
-      enabled: debugSplitMode,
-      forceSplitHands: debugSplitMode,
+      enabled: debugScenario !== 'none',
+      scenario: debugScenario,
     },
-  }), [debugSplitMode]);
+  }), [debugScenario, shoeSize]);
   
   const { gameState, settings, statistics, actions } = useGameState(gameSettings);
   const lastProcessedResult = useRef<string | null>(null);
@@ -346,24 +348,106 @@ function App() {
         title="Game Settings"
       >
         <div className="settings-content">
-          <h3>Debug Options</h3>
+          <h3>Game Settings</h3>
+          <div className="setting-item">
+            <label className="setting-label">
+              <span className="setting-text">
+                <strong>Shoe Size (Number of Decks)</strong>
+                <br />
+                <small>Standard casino uses 6 decks. Range: 1-8 decks</small>
+              </span>
+            </label>
+            <select 
+              value={shoeSize} 
+              onChange={(e) => setShoeSize(parseInt(e.target.value))}
+              className="setting-select"
+            >
+              <option value="1">1 Deck</option>
+              <option value="2">2 Decks</option>
+              <option value="4">4 Decks</option>
+              <option value="6">6 Decks (Standard)</option>
+              <option value="8">8 Decks</option>
+            </select>
+          </div>
+          
+          <h3>Training/Debug Options</h3>
+          <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginBottom: '1rem' }}>
+            Force specific scenarios to practice optimal play. Select one option at a time:
+          </p>
+          
           <div className="setting-item">
             <label className="setting-label">
               <input
-                type="checkbox"
-                checked={debugSplitMode}
-                onChange={(e) => setDebugSplitMode(e.target.checked)}
+                type="radio"
+                name="debugScenario"
+                checked={debugScenario === 'none'}
+                onChange={() => setDebugScenario('none')}
               />
               <span className="setting-text">
-                <strong>Force Split Hands (Debug)</strong>
-                <br />
-                <small>Always deal a pair for testing split functionality. Place a new bet to see the effect.</small>
+                <strong>Normal Play</strong> - Random cards
               </span>
             </label>
           </div>
-          {debugSplitMode && (
+          
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="radio"
+                name="debugScenario"
+                checked={debugScenario === 'double-down'}
+                onChange={() => setDebugScenario('double-down')}
+              />
+              <span className="setting-text">
+                <strong>Double Down Practice</strong> - Get 11 vs dealer 5/6
+              </span>
+            </label>
+          </div>
+          
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="radio"
+                name="debugScenario"
+                checked={debugScenario === 'hit'}
+                onChange={() => setDebugScenario('hit')}
+              />
+              <span className="setting-text">
+                <strong>Hit Practice</strong> - Get 14 vs dealer 10
+              </span>
+            </label>
+          </div>
+          
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="radio"
+                name="debugScenario"
+                checked={debugScenario === 'stand'}
+                onChange={() => setDebugScenario('stand')}
+              />
+              <span className="setting-text">
+                <strong>Stand Practice</strong> - Get 18 (strong hand)
+              </span>
+            </label>
+          </div>
+          
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="radio"
+                name="debugScenario"
+                checked={debugScenario === 'split'}
+                onChange={() => setDebugScenario('split')}
+              />
+              <span className="setting-text">
+                <strong>Split Practice</strong> - Always deal a pair
+              </span>
+            </label>
+          </div>
+          
+          {debugScenario !== 'none' && (
             <div style={{ 
-              marginTop: '0.5rem', 
+              marginTop: '1rem', 
               padding: '0.75rem', 
               background: 'rgba(59, 130, 246, 0.1)', 
               border: '1px solid rgba(59, 130, 246, 0.3)',
@@ -371,7 +455,7 @@ function App() {
               fontSize: '0.875rem',
               color: '#3b82f6'
             }}>
-              ℹ️ Debug mode active! Your next hand will be a pair.
+              ℹ️ Training mode active! Place a new bet to practice the selected scenario.
             </div>
           )}
           
