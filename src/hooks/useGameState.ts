@@ -1,4 +1,4 @@
-import { useState, useCallback, useReducer } from 'react';
+import { useState, useCallback, useReducer, useEffect } from 'react';
 import { GameState, GameSettings, PlayerAction, PlayerStatistics } from '../types/game';
 import { Card } from '../types/card';
 import { createShoe, shuffleDeck } from '../utils/cardUtils';
@@ -11,6 +11,7 @@ import {
   resetGame 
 } from '../utils/gameLogic';
 import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
+import { loadBalance, saveBalance, loadStatistics, saveStatistics, clearBalance } from '../utils/storage';
 
 type GameStateAction = 
   | { type: 'INITIALIZE_GAME'; payload: { settings: GameSettings; preserveBalance?: boolean } }
@@ -58,17 +59,24 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
 
 export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTINGS) {
   const [settings, setSettings] = useState<GameSettings>(initialSettings);
+  
+  // Load saved balance from localStorage, fallback to default
+  const savedBalance = loadBalance();
+  const startingBalance = savedBalance !== null ? savedBalance : initialSettings.startingBalance;
+  
+  // Load saved statistics from localStorage
+  const savedStats = loadStatistics();
   const [statistics, setStatistics] = useState<PlayerStatistics>({
-    gamesPlayed: 0,
-    gamesWon: 0,
-    gamesLost: 0,
-    gamesPushed: 0,
-    totalWinnings: 0,
-    currentBalance: initialSettings.startingBalance,
+    gamesPlayed: savedStats?.totalHands || 0,
+    gamesWon: savedStats?.handsWon || 0,
+    gamesLost: savedStats?.handsLost || 0,
+    gamesPushed: savedStats?.pushes || 0,
+    totalWinnings: savedStats?.totalWinnings || 0,
+    currentBalance: startingBalance,
     strategyAccuracy: 0,
     averageHandValue: 0,
-    blackjacks: 0,
-    busts: 0,
+    blackjacks: savedStats?.blackjacks || 0,
+    busts: savedStats?.busts || 0,
   });
   
   const [gameState, dispatch] = useReducer(gameStateReducer, {
@@ -76,7 +84,7 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
     deck: [],
     playerHand: { cards: [], total: 0, isSoft: false, isBlackjack: false, isBusted: false },
     dealerHand: { cards: [], total: 0, isSoft: false, isBlackjack: false, isBusted: false },
-    playerScore: initialSettings.startingBalance,
+    playerScore: startingBalance,
     currentBet: 0,
     canDoubleDown: false,
     canSplit: false,
@@ -85,6 +93,25 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
     result: null,
     isGameActive: false,
   });
+  
+  // Save balance to localStorage whenever it changes
+  useEffect(() => {
+    saveBalance(gameState.playerScore);
+  }, [gameState.playerScore]);
+  
+  // Save statistics to localStorage whenever they change
+  useEffect(() => {
+    const statsToSave = {
+      totalHands: statistics.gamesPlayed,
+      handsWon: statistics.gamesWon,
+      handsLost: statistics.gamesLost,
+      pushes: statistics.gamesPushed,
+      blackjacks: statistics.blackjacks,
+      busts: statistics.busts,
+      totalWinnings: statistics.totalWinnings,
+    };
+    saveStatistics(statsToSave);
+  }, [statistics]);
   
   const initializeNewGame = useCallback((preserveBalance: boolean = true) => {
     dispatch({ type: 'INITIALIZE_GAME', payload: { settings, preserveBalance } });
@@ -108,8 +135,25 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
   
   const newGame = useCallback(() => {
     // Reset game and reinitialize with starting balance
+    clearBalance(); // Clear saved balance from localStorage
     dispatch({ type: 'INITIALIZE_GAME', payload: { settings, preserveBalance: false } });
   }, [settings]);
+  
+  const resetStatistics = useCallback(() => {
+    // Reset all statistics
+    setStatistics({
+      gamesPlayed: 0,
+      gamesWon: 0,
+      gamesLost: 0,
+      gamesPushed: 0,
+      totalWinnings: 0,
+      currentBalance: gameState.playerScore,
+      strategyAccuracy: 0,
+      averageHandValue: 0,
+      blackjacks: 0,
+      busts: 0,
+    });
+  }, [gameState.playerScore]);
   
   const updateSettings = useCallback((newSettings: Partial<GameSettings>) => {
     setSettings(prev => ({ ...prev, ...newSettings }));
@@ -162,6 +206,7 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
       playerAction,
       dealerPlay,
       newGame,
+      resetStatistics,
       updateSettings,
       updateStatistics,
     },

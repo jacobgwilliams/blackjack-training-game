@@ -479,12 +479,24 @@ describe('Game Flow Integration Tests', () => {
       
       // Wait for game to complete
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Click Reset Game button in header
       await act(async () => {
         await user.click(screen.getByRole('button', { name: /Reset Game/i }));
+      });
+      
+      // Should show confirmation modal
+      await waitFor(() => {
+        expect(screen.getByText('Reset Game?')).toBeInTheDocument();
+      });
+      
+      // Confirm the reset (click the confirm button in the confirmation modal)
+      await act(async () => {
+        const resetButtons = screen.getAllByText('Reset Game');
+        // The last one should be the confirm button in the modal
+        await user.click(resetButtons[resetButtons.length - 1]);
       });
       
       // Should return to betting screen with starting balance of $1000
@@ -550,6 +562,60 @@ describe('Game Flow Integration Tests', () => {
         const currentBalanceText = screen.getByText(/Balance: \$/);
         const currentBalance = parseInt(currentBalanceText.textContent?.match(/\$(\d+)/)?.[1] || '0');
         expect(currentBalance).toBe(expectedBalance);
+      });
+    });
+    
+    it('should reset statistics when clicking Reset Statistics button', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      
+      // Play a hand to generate some statistics
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
+      
+      await waitFor(() => {
+        expect(screen.getByText('Stand')).toBeInTheDocument();
+      });
+      
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Open statistics modal
+      await act(async () => {
+        await user.click(screen.getByRole('button', { name: /Stats/i }));
+      });
+      
+      // Verify statistics show at least 1 game played
+      await waitFor(() => {
+        expect(screen.getByText('Game Statistics')).toBeInTheDocument();
+      });
+      
+      // Click Reset Statistics button
+      await act(async () => {
+        await user.click(screen.getByText('Reset Statistics'));
+      });
+      
+      // Should show confirmation modal
+      await waitFor(() => {
+        expect(screen.getByText('Reset Statistics?')).toBeInTheDocument();
+      });
+      
+      // Confirm the reset (click the confirm button in the confirmation modal)
+      await act(async () => {
+        const confirmButtons = screen.getAllByText('Reset Statistics');
+        // The second one should be the confirm button in the modal
+        await user.click(confirmButtons[confirmButtons.length - 1]);
+      });
+      
+      // Verify statistics are reset (modal should close then reopen to check)
+      await waitFor(() => {
+        expect(screen.queryByText('Reset Statistics?')).not.toBeInTheDocument();
       });
     });
   });

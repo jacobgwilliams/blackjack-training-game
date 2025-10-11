@@ -4,6 +4,7 @@ import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
 import { Modal } from './components/ui/Modal';
 import { Button } from './components/ui/Button';
+import { ConfirmModal } from './components/ui/ConfirmModal';
 import { StrategyGrid } from './components/game/StrategyGrid';
 import { useGameState } from './hooks/useGameState';
 import { useStatistics } from './hooks/useStatistics';
@@ -19,6 +20,8 @@ function App() {
   const [showStrategyGuide, setShowStrategyGuide] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showStrategyHints, setShowStrategyHints] = useState(true);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
   
   const { gameState, settings, statistics, actions } = useGameState(DEFAULT_GAME_SETTINGS);
   const { updateGameResult, updateBalance, updateHandStats } = useStatistics();
@@ -69,12 +72,33 @@ function App() {
     }
   };
   
-  const handleNewGame = () => {
+  const handleResetGameClick = () => {
+    setShowResetConfirm(true);
+  };
+  
+  const handleConfirmResetGame = () => {
     try {
       console.log('Reset game - resetting balance to starting amount');
       actions.newGame(); // This resets the balance
+      setShowResetConfirm(false);
     } catch (error) {
       console.error('Error in new game:', error);
+      setShowResetConfirm(false);
+    }
+  };
+  
+  const handleResetStatsClick = () => {
+    setShowResetStatsConfirm(true);
+  };
+  
+  const handleConfirmResetStats = () => {
+    try {
+      console.log('Reset statistics');
+      actions.resetStatistics();
+      setShowResetStatsConfirm(false);
+    } catch (error) {
+      console.error('Error resetting statistics:', error);
+      setShowResetStatsConfirm(false);
     }
   };
   
@@ -104,7 +128,7 @@ function App() {
         onShowRules={() => setShowRules(true)}
         onShowStatistics={() => setShowStatistics(true)}
         onShowSettings={() => setShowSettings(true)}
-        onResetGame={handleNewGame}
+        onResetGame={handleResetGameClick}
         onToggleStrategyGrid={() => setShowStrategyGrid(!showStrategyGrid)}
         onToggleStrategyHints={() => setShowStrategyHints(!showStrategyHints)}
         showStrategyHints={showStrategyHints}
@@ -265,6 +289,14 @@ function App() {
               </div>
             </div>
           </div>
+          <div className="statistics-footer">
+            <Button
+              variant="danger"
+              onClick={handleResetStatsClick}
+            >
+              Reset Statistics
+            </Button>
+          </div>
         </div>
       </Modal>
       
@@ -357,6 +389,30 @@ function App() {
           </ul>
         </div>
       </Modal>
+      
+      {/* Reset Game Confirmation */}
+      <ConfirmModal
+        isOpen={showResetConfirm}
+        title="Reset Game?"
+        message="Are you sure you want to reset the game? Your current balance will be reset to $1000. Your statistics will be preserved."
+        confirmText="Reset Game"
+        cancelText="Cancel"
+        variant="warning"
+        onConfirm={handleConfirmResetGame}
+        onCancel={() => setShowResetConfirm(false)}
+      />
+      
+      {/* Reset Statistics Confirmation */}
+      <ConfirmModal
+        isOpen={showResetStatsConfirm}
+        title="Reset Statistics?"
+        message="Are you sure you want to reset all your statistics? This action cannot be undone. Your current balance will not be affected."
+        confirmText="Reset Statistics"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleConfirmResetStats}
+        onCancel={() => setShowResetStatsConfirm(false)}
+      />
     </div>
   );
 }

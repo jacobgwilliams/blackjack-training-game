@@ -1,0 +1,136 @@
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-radius: 12px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  border: 2px solid #444;
+}
+
+.confirm-modal--danger {
+  border-color: #dc3545;
+}
+
+.confirm-modal--warning {
+  border-color: #ffc107;
+}
+
+.confirm-modal--info {
+  border-color: #17a2b8;
+}
+
+.confirm-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #444;
+}
+
+.confirm-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.confirm-modal-body {
+  padding: 24px;
+}
+
+.confirm-modal-body p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #d0d0d0;
+}
+
+.confirm-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #444;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.confirm-modal-button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.confirm-modal-button--cancel {
+  background-color: #444;
+  color: #ffffff;
+}
+
+.confirm-modal-button--cancel:hover {
+  background-color: #555;
+}
+
+.confirm-modal-button--confirm {
+  color: #ffffff;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--danger {
+  background-color: #dc3545;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--danger:hover {
+  background-color: #c82333;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--warning {
+  background-color: #ffc107;
+  color: #000000;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--warning:hover {
+  background-color: #e0a800;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--info {
+  background-color: #17a2b8;
+}
+
+.confirm-modal-button--confirm.confirm-modal-button--info:hover {
+  background-color: #138496;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
