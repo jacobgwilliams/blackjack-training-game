@@ -10,11 +10,12 @@ A web-based blackjack training game designed to help players learn optimal black
 #### Frontend
 - **Framework**: React 18+ with TypeScript
 - **Build Tool**: Vite
-- **Styling**: CSS Modules or Styled Components
-- **State Management**: React Context API or Redux Toolkit
+- **Styling**: CSS Modules
+- **State Management**: React Context API (useReducer hook)
 - **Testing**: Jest + React Testing Library
 - **Linting**: ESLint + Prettier
 - **Type Checking**: TypeScript strict mode
+- **Storage**: localStorage for state persistence
 
 #### Development Tools
 - **Package Manager**: npm or yarn
@@ -32,18 +33,22 @@ A web-based blackjack training game designed to help players learn optimal black
 - **Betting System**: Virtual currency with configurable limits
 
 #### Training Features
-- **Strategy Hints**: Real-time basic strategy recommendations
-- **Probability Calculator**: Show odds for different actions
-- **Statistics Tracking**: Track wins, losses, and strategy adherence
-- **Practice Modes**: Different difficulty levels and scenarios
-- **Rule Explanations**: Interactive tutorial system
+- **Strategy Hints**: Real-time basic strategy recommendations (toggleable)
+- **Strategy Grid**: Interactive visual strategy reference chart
+- **Basic Strategy Guide**: Comprehensive written strategy explanations
+- **Statistics Tracking**: Persistent tracking of wins, losses, pushes, blackjacks, busts, and total winnings
+- **Rule Explanations**: Detailed rules modal with special actions and casino hand signals
+- **Debug Mode**: Force split hands for testing and practice
 
 #### User Interface
-- **Responsive Design**: Mobile-first approach
-- **Accessibility**: WCAG 2.1 AA compliance
-- **Theme Support**: Light/dark mode toggle
-- **Animations**: Smooth card dealing and transitions
-- **Sound Effects**: Optional audio feedback
+- **Responsive Design**: Mobile-first approach with full desktop support
+- **Accessibility**: WCAG 2.1 AA compliance with keyboard navigation
+- **Theme Support**: Automatic light/dark mode based on system preferences
+- **Animations**: Smooth card dealing and transitions (300-500ms)
+- **Modal System**: Reusable modals for Rules, Statistics, Settings, Strategy, Help
+- **Confirmation Dialogs**: User-friendly confirmation for destructive actions
+- **Visual Feedback**: Active hand indicators, win/lose badges, game phase display
+- **Split Hand Display**: Side-by-side split hands with individual bet tracking
 
 ### 4. Technical Architecture
 
@@ -52,38 +57,42 @@ A web-based blackjack training game designed to help players learn optimal black
 src/
 ├── components/
 │   ├── game/
-│   │   ├── GameBoard.tsx
-│   │   ├── Card.tsx
-│   │   ├── Hand.tsx
-│   │   └── Dealer.tsx
+│   │   ├── GameBoard.tsx          # Main game display
+│   │   ├── Card.tsx                # Individual card component
+│   │   ├── Hand.tsx                # Hand display (cards + total)
+│   │   └── StrategyGrid.tsx        # Interactive strategy chart
 │   ├── ui/
-│   │   ├── Button.tsx
-│   │   ├── Modal.tsx
-│   │   └── Card.tsx
+│   │   ├── Button.tsx              # Reusable button component
+│   │   ├── Modal.tsx               # Reusable modal component
+│   │   └── ConfirmModal.tsx        # Confirmation dialog
 │   └── layout/
-│       ├── Header.tsx
-│       └── Footer.tsx
+│       ├── Header.tsx              # Navigation and controls
+│       └── Footer.tsx              # Links and info
 ├── hooks/
-│   ├── useGameState.ts
-│   ├── useBlackjackStrategy.ts
-│   └── useStatistics.ts
+│   ├── useGameState.ts             # Game state management (useReducer)
+│   └── useBlackjackStrategy.ts     # Strategy recommendations
 ├── utils/
-│   ├── cardUtils.ts
-│   ├── gameLogic.ts
-│   └── strategy.ts
+│   ├── cardUtils.ts                # Card operations and hand evaluation
+│   ├── gameLogic.ts                # Core game logic with split support
+│   ├── strategy.ts                 # Basic strategy implementation
+│   └── storage.ts                  # localStorage utilities
 ├── types/
-│   ├── game.ts
-│   └── card.ts
-└── constants/
-    ├── gameRules.ts
-    └── strategy.ts
+│   ├── game.ts                     # Game state types with SplitHandState
+│   └── card.ts                     # Card and hand types
+├── constants/
+│   ├── gameRules.ts                # Game rules and settings
+│   └── strategy.ts                 # Strategy tables
+└── __tests__/
+    ├── integration/                # Integration tests
+    └── utils/                      # Unit tests
 ```
 
 #### State Management
-- **Game State**: Current hand, deck, dealer hand, player score
-- **UI State**: Modal visibility, theme, sound settings
-- **Statistics**: Session data, historical performance
-- **Settings**: User preferences, difficulty level
+- **Game State**: Current hand, deck, dealer hand, player score, split hands tracking
+- **Persistence**: localStorage for balance and statistics across sessions
+- **UI State**: Modal visibility, strategy hints toggle, debug mode
+- **Statistics**: Persistent tracking of games played, wins, losses, pushes, blackjacks, busts
+- **Settings**: User preferences including debug mode for testing split functionality
 
 ### 5. Game Rules Implementation
 
@@ -94,11 +103,20 @@ src/
 - **Blackjack**: 21 with first two cards (3:2 payout)
 - **Dealer Rules**: Must hit on 16, stand on 17
 
-#### Advanced Features
-- **Splitting**: Split pairs of same value
-- **Doubling Down**: Double bet on certain hands
-- **Insurance**: Side bet against dealer blackjack
-- **Surrender**: Give up half bet (if allowed)
+#### Advanced Features (All Implemented)
+- **Splitting**: Full split implementation with side-by-side hand display
+  - Independent bet tracking per hand
+  - Automatic hand progression
+  - Support for all action combinations (hit, stand, double on split hands)
+  - Visual indicators for active/completed hands
+- **Doubling Down**: Double bet with automatic hand completion
+  - Full support on split hands
+  - Proper balance deduction and payout
+- **Insurance**: Side bet against dealer blackjack (UI available)
+- **Surrender**: Give up half bet (UI available)
+- **Balance Persistence**: Player balance saved across sessions
+- **Statistics Persistence**: Game statistics saved across sessions
+- **Reset Functionality**: Separate reset for balance and statistics with confirmation
 
 ### 6. Strategy Implementation
 
@@ -218,16 +236,56 @@ src/
 - **Error Rates**: Track game logic errors
 - **User Engagement**: Monitor return visits
 
-### 14. Future Enhancements
+### 14. Implemented Features Summary
+
+#### Core Gameplay ✅
+- Complete blackjack rules with proper hand evaluation
+- 6-deck shoe with proper shuffling
+- Betting system with configurable limits ($10-$500)
+- Starting balance of $1000 with persistence
+- Automatic dealer play after player completes hands
+
+#### Split Functionality ✅
+- Full split implementation for pairs
+- Side-by-side hand display with visual indicators
+- Independent bet tracking ($10 per hand)
+- Support for hit, stand, and double down on split hands
+- Automatic hand progression and result calculation
+- Debug mode to force split hands for testing
+
+#### Training Features ✅
+- Real-time strategy hints (toggleable)
+- Interactive strategy grid with color-coded recommendations
+- Comprehensive basic strategy guide
+- Detailed rules with casino hand signals
+- Persistent statistics tracking
+
+#### UI/UX ✅
+- Responsive design (desktop and mobile)
+- Dark mode support (automatic based on system)
+- Modal system for all information displays
+- Confirmation dialogs for destructive actions
+- Visual feedback for game state
+- Smooth animations (300-500ms transitions)
+
+#### Data Persistence ✅
+- Balance saved in localStorage
+- Statistics saved in localStorage
+- Separate reset functionality for balance and stats
+- Data persists across browser sessions
+
+### 15. Future Enhancements
 
 #### Phase 2 Features
-- **Multiplayer**: Real-time multiplayer games
-- **Tournaments**: Competitive gameplay
-- **Advanced Strategies**: Card counting training
-- **Customization**: Custom themes and avatars
+- **Card Counting Training**: Advanced strategy modes
+- **Multiple Players**: Multi-hand gameplay
+- **Achievement System**: Track milestones and accomplishments
+- **Customization**: Custom themes and card designs
+- **Sound Effects**: Optional audio feedback
+- **Probability Calculator**: Real-time odds display
 
 #### Technical Improvements
-- **PWA Support**: Progressive Web App features
-- **Offline Play**: Play without internet connection
-- **Performance**: Further optimization and caching
-- **Accessibility**: Enhanced accessibility features
+- **PWA Support**: Progressive Web App features for offline play
+- **Performance**: Further bundle size optimization
+- **Advanced Analytics**: More detailed gameplay statistics
+- **Accessibility**: Enhanced screen reader support
