@@ -81,10 +81,10 @@
   margin-bottom: 1rem;
 }
 
-.card {
-  background: #1f2937;
-  color: #f9fafb;
-  border: 2px solid #374151;
+.drills-mode .card {
+  background: #ffffff;
+  color: #111827;
+  border: 2px solid #cbd5e1;
   border-radius: 0.5rem;
   padding: 0.75rem;
   font-size: 1.25rem;
