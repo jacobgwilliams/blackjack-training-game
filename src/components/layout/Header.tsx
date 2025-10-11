@@ -51,7 +51,7 @@ export function Header({
               <Dropdown
                 options={[
                   { value: 'gameplay', label: 'Gameplay' },
-                  { value: 'drills', label: 'Run Drills', icon: '🎯' }
+                  { value: 'drills', label: 'Run Drills' }
                 ]}
                 value=""
                 onChange={(value) => {
@@ -88,7 +88,7 @@ export function Header({
               </Button>
             )}
             
-            {onToggleStrategyHints && (
+            {onToggleStrategyHints && !isDrillsMode && (
               <Button
                 variant="secondary"
                 size="small"

@@ -73,7 +73,7 @@ export function DrillsMode({ onExitDrills }: DrillsModeProps) {
   return (
     <div className="drills-mode">
       <div className="drills-header">
-        <h2>🎯 Drills Mode</h2>
+        <h2>Drills Mode</h2>
         <div className="drills-stats">
           <div className="drills-score">
             Score: {score.correct}/{score.total} ({score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0}%)
