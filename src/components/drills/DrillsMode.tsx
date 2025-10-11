@@ -74,11 +74,6 @@ export function DrillsMode({ onExitDrills }: DrillsModeProps) {
     <div className="drills-mode">
       <div className="drills-header">
         <h2>🎯 Drills Mode</h2>
-        <div className="drills-info">
-          <div className="scenario-count">
-            {allScenarios.length} unique scenarios available
-          </div>
-        </div>
         <div className="drills-stats">
           <div className="drills-score">
             Score: {score.correct}/{score.total} ({score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0}%)

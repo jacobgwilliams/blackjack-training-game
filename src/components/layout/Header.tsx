@@ -1,4 +1,5 @@
 import { Button } from '../ui/Button';
+import { Dropdown } from '../ui/Dropdown';
 import './Header.css';
 
 interface HeaderProps {
@@ -32,23 +33,11 @@ export function Header({
         <div className="header-left">
           <h1 className="header-title">
             <span className="header-title-icon">🃏</span>
-            Blackjack Training
+            PracticeBlackjack.org
           </h1>
         </div>
         
         <div className="header-center">
-          {onToggleDrillsMode && (
-            <div className="header-mode-toggle">
-              <Button
-                variant={isDrillsMode ? "secondary" : "primary"}
-                size="small"
-                onClick={onToggleDrillsMode}
-                className="header-mode-button"
-              >
-                {isDrillsMode ? 'Play Hands' : 'Drills Mode'}
-              </Button>
-            </div>
-          )}
           {currentBalance > 0 && !isDrillsMode && (
             <div className="header-balance">
               Balance: <span className="header-balance-amount">${currentBalance}</span>
@@ -58,6 +47,24 @@ export function Header({
         
         <div className="header-right">
           <nav className="header-nav">
+            {onToggleDrillsMode && (
+              <Dropdown
+                options={[
+                  { value: 'gameplay', label: 'Gameplay', icon: '🎮' },
+                  { value: 'drills', label: 'Run Drills', icon: '🎯' }
+                ]}
+                value={isDrillsMode ? 'drills' : 'gameplay'}
+                onChange={(value) => {
+                  if (value === 'drills' && !isDrillsMode) {
+                    onToggleDrillsMode();
+                  } else if (value === 'gameplay' && isDrillsMode) {
+                    onToggleDrillsMode();
+                  }
+                }}
+                className="header-mode-dropdown"
+              />
+            )}
+            
             {onResetGame && (
               <Button
                 variant="primary"
