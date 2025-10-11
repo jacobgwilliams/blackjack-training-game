@@ -84,6 +84,7 @@ export function GameBoard({
           title="Dealer"
           isDealer={true}
           showTotal={gameState.phase === 'game-over' || gameState.phase === 'dealer-turn'}
+          hideHoleCard={gameState.phase === 'player-turn' || gameState.phase === 'betting'}
         />
         
         {gameState.isSplit ? (

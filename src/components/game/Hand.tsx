@@ -8,6 +8,7 @@ interface HandProps {
   title: string;
   isDealer?: boolean;
   showTotal?: boolean;
+  hideHoleCard?: boolean;
   className?: string;
 }
 
@@ -15,7 +16,8 @@ export function Hand({
   hand, 
   title, 
   isDealer = false, 
-  showTotal = true, 
+  showTotal = true,
+  hideHoleCard = false,
   className = '' 
 }: HandProps) {
   const handClasses = [
@@ -48,7 +50,7 @@ export function Hand({
           <Card
             key={`${card.suit}-${card.rank}-${index}`}
             card={card}
-            isHidden={isDealer && index === 1 && hand.cards.length === 2}
+            isHidden={isDealer && index === 1 && hideHoleCard}
             isDealing={index === hand.cards.length - 1}
           />
         ))}

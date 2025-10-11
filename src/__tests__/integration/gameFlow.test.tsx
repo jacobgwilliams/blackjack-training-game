@@ -378,10 +378,10 @@ describe('Game Flow Integration Tests', () => {
         expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
-      // Get the result
-      const hasWin = screen.queryByText(/You Win!|Blackjack!/);
-      const hasPush = screen.queryByText(/Push/);
-      const hasLoss = screen.queryByText(/Dealer Wins|Dealer Blackjack/);
+      // Get the result (look for specific game result messages, not header text)
+      const hasWin = screen.queryByText(/^You Win!$|^Blackjack! You Win!$/);
+      const hasPush = screen.queryByText(/^Push - It's a tie!$/);
+      const hasLoss = screen.queryByText(/^Dealer Wins$|^Dealer Blackjack!$/);
       
       // Verify balance was updated based on result
       if (hasWin) {
