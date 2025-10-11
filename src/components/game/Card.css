@@ -9,8 +9,8 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: #fefefe;
+  border: 1px solid #d1d5db;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -36,8 +36,8 @@
 }
 
 .card--hidden {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-  border: 1px solid #1e40af;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  border: 1px solid #3b82f6;
 }
 
 .card-front {
@@ -48,8 +48,8 @@
     "top-left . top-right"
     ". center ."
     "bottom-left . bottom-right";
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
   padding: 0.5rem;
   position: relative;
   box-sizing: border-box;
@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   border-radius: 0.5rem;
 }
 
@@ -107,10 +107,12 @@
   font-size: 0.875rem;
   font-weight: 700;
   margin-bottom: 0.125rem;
+  line-height: 1;
 }
 
 .card-suit {
   font-size: 0.75rem;
+  line-height: 1;
 }
 
 .card-center {
@@ -196,13 +198,13 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .card {
-    background: #f9fafb;
-    border-color: #d1d5db;
+    background: #f8fafc;
+    border-color: #cbd5e1;
   }
   
   .card--black .card-rank,
   .card--black .card-suit,
   .card--black .card-suit-large {
-    color: #111827;
+    color: #0f172a;
   }
 }
