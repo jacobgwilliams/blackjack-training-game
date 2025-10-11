@@ -1,0 +1,302 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f9fafb;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.betting-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.betting-content {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.betting-content h2 {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f9fafb;
+}
+
+.betting-content p {
+  margin: 0 0 2rem 0;
+  font-size: 1.125rem;
+  color: #d1d5db;
+}
+
+.betting-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.betting-options button {
+  min-width: 100px;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.rules-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.rules-content h3 {
+  margin: 1.5rem 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.rules-content h3:first-child {
+  margin-top: 0;
+}
+
+.rules-content p {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.rules-content ul {
+  margin: 0 0 1rem 0;
+  padding-left: 1.5rem;
+  color: #374151;
+}
+
+.rules-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.rules-content strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.statistics-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.statistic-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.statistic-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.statistic-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.settings-content {
+  text-align: center;
+  padding: 2rem;
+  color: #374151;
+}
+
+.strategy-content,
+.help-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.strategy-content h3,
+.help-content h3 {
+  margin: 1.5rem 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.strategy-content h3:first-child,
+.help-content h3:first-child {
+  margin-top: 0;
+}
+
+.strategy-content p,
+.help-content p {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.strategy-content ul,
+.help-content ul,
+.help-content ol {
+  margin: 0 0 1rem 0;
+  padding-left: 1.5rem;
+  color: #374151;
+}
+
+.strategy-content li,
+.help-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.strategy-content strong,
+.help-content strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem;
+  }
+  
+  .betting-content {
+    padding: 2rem;
+  }
+  
+  .betting-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .betting-content p {
+    font-size: 1rem;
+  }
+  
+  .betting-options {
+    gap: 0.75rem;
+  }
+  
+  .betting-options button {
+    min-width: 80px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .statistics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .statistic-item {
+    padding: 0.75rem;
+  }
+  
+  .statistic-label {
+    font-size: 0.75rem;
+  }
+  
+  .statistic-value {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .betting-content {
+    padding: 1.5rem;
+  }
+  
+  .betting-content h2 {
+    font-size: 1.25rem;
+  }
+  
+  .betting-options {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .betting-options button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .rules-content h3 {
+    color: #f9fafb;
+  }
+  
+  .rules-content p,
+  .rules-content li {
+    color: #d1d5db;
+  }
+  
+  .rules-content strong {
+    color: #f9fafb;
+  }
+  
+  .statistic-item {
+    background: #374151;
+    border-color: #4b5563;
+  }
+  
+  .statistic-label {
+    color: #9ca3af;
+  }
+  
+  .statistic-value {
+    color: #f9fafb;
+  }
+  
+  .settings-content {
+    color: #d1d5db;
+  }
+  
+  .strategy-content h3,
+  .help-content h3 {
+    color: #f9fafb;
+  }
+  
+  .strategy-content p,
+  .help-content p,
+  .strategy-content li,
+  .help-content li {
+    color: #d1d5db;
+  }
+  
+  .strategy-content strong,
+  .help-content strong {
+    color: #f9fafb;
+  }
+}

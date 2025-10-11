@@ -1,0 +1,235 @@
+.game-board {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f9fafb;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.game-balance,
+.game-bet,
+.game-phase {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.game-balance {
+  color: #10b981;
+}
+
+.game-bet {
+  color: #fbbf24;
+}
+
+.game-phase {
+  color: #8b5cf6;
+}
+
+.game-hands {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.strategy-hint {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.strategy-hint-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #93c5fd;
+  margin-bottom: 0.5rem;
+}
+
+.strategy-hint-action {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  margin-bottom: 0.5rem;
+}
+
+.strategy-hint-reasoning {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-bottom: 0.5rem;
+}
+
+.strategy-hint-confidence {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.game-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.player-actions,
+.dealer-actions,
+.game-over-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-result {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: result-appear 0.5s ease-out;
+}
+
+@keyframes result-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.game-result--success {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+.game-result--danger {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+.game-result--secondary {
+  background: rgba(107, 114, 128, 0.2);
+  border: 1px solid rgba(107, 114, 128, 0.4);
+  color: #6b7280;
+}
+
+.game-loading {
+  text-align: center;
+  padding: 2rem;
+}
+
+.game-loading p {
+  margin: 0 0 1rem 0;
+  color: #d1d5db;
+  font-size: 1.125rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-board {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .game-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .game-balance,
+  .game-bet,
+  .game-phase {
+    font-size: 0.875rem;
+  }
+  
+  .strategy-hint {
+    padding: 1rem;
+  }
+  
+  .strategy-hint-title {
+    font-size: 0.875rem;
+  }
+  
+  .strategy-hint-action {
+    font-size: 1.25rem;
+  }
+  
+  .strategy-hint-reasoning {
+    font-size: 0.75rem;
+  }
+  
+  .player-actions,
+  .dealer-actions,
+  .game-over-actions {
+    gap: 0.75rem;
+  }
+  
+  .game-result {
+    font-size: 1.25rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-board {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .game-info {
+    padding: 0.75rem;
+  }
+  
+  .strategy-hint {
+    padding: 0.75rem;
+  }
+  
+  .strategy-hint-action {
+    font-size: 1.125rem;
+  }
+  
+  .player-actions,
+  .dealer-actions,
+  .game-over-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .player-actions button,
+  .dealer-actions button,
+  .game-over-actions button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .game-result {
+    font-size: 1.125rem;
+    padding: 0.5rem 1rem;
+  }
+}
