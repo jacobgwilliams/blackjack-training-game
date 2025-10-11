@@ -282,12 +282,15 @@ export const generateAllScenarios = (): DrillScenario[] => {
   scenarios.push(...generateHardTotalScenarios());
   scenarios.push(...generateSoftTotalScenarios());
   scenarios.push(...generatePairScenarios());
-  scenarios.push(...generateBlackjackScenarios());
+  // Note: Blackjack scenarios (21) are filtered out as they're too obvious
   
   // Remove duplicates and filter out invalid scenarios
   const uniqueScenarios = scenarios.filter((scenario, index, self) => {
     // Remove scenarios with busted hands
     if (scenario.playerHand.isBusted) return false;
+    
+    // Remove scenarios with 21 (too obvious - always stand)
+    if (scenario.playerHand.total === 21) return false;
     
     // Remove scenarios where the action is not one of our options
     const validActions = ['hit', 'stand', 'double-down', 'split'];
