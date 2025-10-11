@@ -153,6 +153,16 @@ export function getBasicStrategyRecommendation(
     };
   }
   
+  // Check for blackjack first
+  if (playerHand.isBlackjack) {
+    return {
+      action: 'stand',
+      confidence: 100,
+      reasoning: `Blackjack! You automatically win unless the dealer also has blackjack. No action needed - the game will resolve automatically.`,
+      expectedValue: 1.5, // 3:2 payout
+    };
+  }
+  
   // Check for soft totals
   if (isSoftTotal(playerHand)) {
     const softIndex = Math.min(playerHand.total - 13, SOFT_TOTALS_STRATEGY.length - 1);

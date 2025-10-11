@@ -220,6 +220,45 @@ export function dealInitialCards(gameState: GameState, debugMode?: { enabled: bo
   const canSurr = canSurrender(playerHand);
   const canInsurance = dealerHand.cards[0].rank === 'A';
   
+  // Check for automatic blackjack resolution
+  if (playerHand.isBlackjack) {
+    // Player has blackjack - check if dealer also has blackjack
+    if (dealerHand.isBlackjack) {
+      // Both have blackjack - push
+      return {
+        ...gameState,
+        deck: newDeck,
+        playerHand,
+        dealerHand,
+        canDoubleDown: false,
+        canSplit: false,
+        canSurrender: false,
+        canTakeInsurance: false,
+        phase: 'game-over',
+        result: 'push',
+      };
+    } else {
+      // Player has blackjack, dealer doesn't - player wins automatically
+      const winnings = calculateWinnings(gameState.currentBet, 'player-blackjack');
+      const netWinnings = winnings - gameState.currentBet;
+      
+      return {
+        ...gameState,
+        deck: newDeck,
+        playerHand,
+        dealerHand,
+        canDoubleDown: false,
+        canSplit: false,
+        canSurrender: false,
+        canTakeInsurance: false,
+        phase: 'game-over',
+        result: 'player-blackjack',
+        playerScore: gameState.playerScore + winnings,
+        lastHandWinnings: netWinnings,
+      };
+    }
+  }
+  
   return {
     ...gameState,
     deck: newDeck,
