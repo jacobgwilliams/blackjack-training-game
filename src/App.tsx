@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
@@ -23,6 +23,7 @@ function App() {
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
   
   const { gameState, settings, statistics, actions } = useGameState(DEFAULT_GAME_SETTINGS);
+  const lastProcessedResult = useRef<string | null>(null);
   
   // Initialize game on mount
   useEffect(() => {
@@ -31,10 +32,17 @@ function App() {
   
   // Update statistics when game ends
   useEffect(() => {
-    if (gameState.phase === 'game-over' && gameState.result) {
+    // Only update statistics once per game by tracking the result
+    if (gameState.phase === 'game-over' && gameState.result && gameState.result !== lastProcessedResult.current) {
+      lastProcessedResult.current = gameState.result;
       actions.updateStatistics(gameState.result);
     }
-  }, [gameState.phase, gameState.result, actions]);
+    
+    // Reset the ref when a new game starts
+    if (gameState.phase === 'betting') {
+      lastProcessedResult.current = null;
+    }
+  }, [gameState.phase, gameState.result]);
   
   const handlePlayerAction = async (action: string) => {
     try {
