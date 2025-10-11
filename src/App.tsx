@@ -579,35 +579,42 @@ function App() {
         title="About Blackjack Training Game"
       >
         <div className="about-content">
-          <h3>Our Mission</h3>
+          <h3>What This Is All About</h3>
           <p>
-            The goal of this app is to help people learn the patterns that exist in blackjack 
-            and to develop confidence when they're in a casino setting. Through interactive 
-            gameplay, real-time strategy hints, and comprehensive training modes, we aim to 
-            make blackjack strategy accessible and understandable for everyone.
+            I built this app because I wanted to help people actually understand blackjack 
+            instead of just winging it at the casino. You know how it is - you sit down 
+            at a table, get dealt some cards, and suddenly you're making decisions that 
+            could cost you money without really knowing why.
+          </p>
+          <p>
+            This tool teaches you the patterns that exist in blackjack and helps you build 
+            confidence so when you're in a real casino setting, you're not just guessing. 
+            It's like having a patient teacher who never gets tired of explaining the same 
+            concept over and over.
           </p>
           
-          <h3>What You'll Learn</h3>
+          <h3>What You'll Actually Learn</h3>
           <ul>
-            <li><strong>Basic Strategy:</strong> The mathematically optimal way to play every hand</li>
-            <li><strong>Pattern Recognition:</strong> Understanding when to hit, stand, double down, or split</li>
-            <li><strong>Risk Management:</strong> Learning when to take insurance and when to surrender</li>
-            <li><strong>Confidence Building:</strong> Practice in a risk-free environment before playing for real money</li>
+            <li><strong>Basic Strategy:</strong> The math behind every decision - no more guessing</li>
+            <li><strong>Pattern Recognition:</strong> You'll start seeing when to hit, stand, double down, or split without thinking too hard</li>
+            <li><strong>Smart Risk Management:</strong> When insurance is actually worth it (spoiler: usually it's not)</li>
+            <li><strong>Real Confidence:</strong> Practice without losing real money, so you're ready when you are</li>
           </ul>
           
-          <h3>Features</h3>
+          <h3>Cool Stuff This App Does</h3>
           <ul>
-            <li>Real-time strategy recommendations with educational explanations</li>
-            <li>Comprehensive training modes for specific scenarios</li>
-            <li>Statistics tracking to monitor your improvement</li>
-            <li>Full split hand functionality with side-by-side play</li>
-            <li>Responsive design that works on all devices</li>
+            <li>Gives you strategy hints in real-time with explanations that actually make sense</li>
+            <li>Training modes that focus on specific scenarios you'll actually encounter</li>
+            <li>Tracks your stats so you can see yourself getting better over time</li>
+            <li>Full split hand functionality - because splitting can be confusing as hell</li>
+            <li>Works on your phone, tablet, or computer - practice anywhere</li>
           </ul>
           
-          <h3>Feedback & Support</h3>
+          <h3>Found a Bug? Have an Idea?</h3>
           <p>
-            Found a bug or have a suggestion? We'd love to hear from you! 
-            Please report issues, bugs, or feature requests through our GitHub repository.
+            This thing is a work in progress, and I'm always looking to make it better. 
+            If you find something broken or have a cool idea for a new feature, 
+            definitely let me know!
           </p>
           <p>
             <a 
@@ -616,15 +623,15 @@ function App() {
               rel="noopener noreferrer"
               className="github-issues-link"
             >
-              🐛 Report Issues & Bugs →
+              🐛 Report Issues & Ideas →
             </a>
           </p>
           
-          <h3>Responsible Gaming</h3>
+          <h3>Play Responsibly</h3>
           <p>
-            This training tool is designed for educational purposes. Always gamble responsibly 
+            This is a training tool, not a money-making machine. Always gamble responsibly 
             and within your means. If you or someone you know has a gambling problem, 
-            please seek help from professional resources.
+            please get help from the right people.
           </p>
         </div>
       </Modal>
