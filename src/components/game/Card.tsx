@@ -34,18 +34,9 @@ export function Card({ card, isHidden = false, isDealing = false, className = ''
   return (
     <div className={cardClasses}>
       <div className="card-front">
-        <div className="card-corner card-corner--top-left">
-          <div className="card-rank">{card.displayValue}</div>
-          <div className="card-suit">{suitSymbol}</div>
-        </div>
-        
-        <div className="card-center">
-          <div className="card-suit-large">{suitSymbol}</div>
-        </div>
-        
-        <div className="card-corner card-corner--bottom-right">
-          <div className="card-rank">{card.displayValue}</div>
-          <div className="card-suit">{suitSymbol}</div>
+        <div className="card-value">
+          <span className="card-rank">{card.displayValue}</span>
+          <span className="card-suit">{suitSymbol}</span>
         </div>
       </div>
     </div>
