@@ -224,9 +224,9 @@ export function GameBoard({
             <p>Processing...</p>
             <Button
               variant="secondary"
-              onClick={onNewGame}
+              onClick={onDeal}
             >
-              New Game
+              Deal
             </Button>
           </div>
         )}

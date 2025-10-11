@@ -16,7 +16,7 @@ import { loadBalance, saveBalance, loadStatistics, saveStatistics, clearBalance 
 type GameStateAction = 
   | { type: 'INITIALIZE_GAME'; payload: { settings: GameSettings; preserveBalance?: boolean } }
   | { type: 'PLACE_BET'; payload: { betAmount: number } }
-  | { type: 'DEAL_INITIAL_CARDS' }
+  | { type: 'DEAL_INITIAL_CARDS'; payload: { debugMode?: { enabled: boolean; forceSplitHands?: boolean } } }
   | { type: 'EXECUTE_PLAYER_ACTION'; payload: { action: PlayerAction } }
   | { type: 'PLAY_DEALER_HAND' }
   | { type: 'RESET_GAME' }
@@ -36,7 +36,8 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
     }
     
     case 'DEAL_INITIAL_CARDS': {
-      return dealInitialCards(state);
+      const { debugMode } = action.payload;
+      return dealInitialCards(state, debugMode);
     }
     
     case 'EXECUTE_PLAYER_ACTION': {
@@ -122,8 +123,8 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
   }, []);
   
   const startGame = useCallback(() => {
-    dispatch({ type: 'DEAL_INITIAL_CARDS' });
-  }, []);
+    dispatch({ type: 'DEAL_INITIAL_CARDS', payload: { debugMode: settings.debugMode } });
+  }, [settings.debugMode]);
   
   const playerAction = useCallback((action: PlayerAction) => {
     dispatch({ type: 'EXECUTE_PLAYER_ACTION', payload: { action } });

@@ -21,8 +21,18 @@ function App() {
   const [showStrategyHints, setShowStrategyHints] = useState(true);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
+  const [debugSplitMode, setDebugSplitMode] = useState(false);
   
-  const { gameState, settings, statistics, actions } = useGameState(DEFAULT_GAME_SETTINGS);
+  // Apply debug mode to settings
+  const gameSettings = {
+    ...DEFAULT_GAME_SETTINGS,
+    debugMode: {
+      enabled: debugSplitMode,
+      forceSplitHands: debugSplitMode,
+    },
+  };
+  
+  const { gameState, settings, statistics, actions } = useGameState(gameSettings);
   const lastProcessedResult = useRef<string | null>(null);
   
   // Initialize game on mount
@@ -321,7 +331,41 @@ function App() {
         title="Game Settings"
       >
         <div className="settings-content">
-          <p>Settings will be available in a future update.</p>
+          <h3>Debug Options</h3>
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="checkbox"
+                checked={debugSplitMode}
+                onChange={(e) => setDebugSplitMode(e.target.checked)}
+              />
+              <span className="setting-text">
+                <strong>Force Split Hands (Debug)</strong>
+                <br />
+                <small>Always deal a pair for testing split functionality</small>
+              </span>
+            </label>
+          </div>
+          
+          <h3>Strategy Hints</h3>
+          <div className="setting-item">
+            <label className="setting-label">
+              <input
+                type="checkbox"
+                checked={showStrategyHints}
+                onChange={(e) => setShowStrategyHints(e.target.checked)}
+              />
+              <span className="setting-text">
+                <strong>Show Strategy Hints</strong>
+                <br />
+                <small>Display optimal play recommendations during the game</small>
+              </span>
+            </label>
+          </div>
+          
+          <p style={{ marginTop: '1.5rem', fontSize: '0.875rem', color: '#9ca3af' }}>
+            Additional settings will be available in future updates.
+          </p>
         </div>
       </Modal>
 

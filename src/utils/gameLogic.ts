@@ -50,23 +50,73 @@ export function placeBet(gameState: GameState, betAmount: number): GameState {
 /**
  * Deals initial cards to player and dealer
  */
-export function dealInitialCards(gameState: GameState): GameState {
+export function dealInitialCards(gameState: GameState, debugMode?: { enabled: boolean; forceSplitHands?: boolean }): GameState {
   let newDeck = gameState.deck;
   let playerHand = gameState.playerHand;
   let dealerHand = gameState.dealerHand;
   
-  // Deal two cards to player
-  for (let i = 0; i < 2; i++) {
-    const { card, remainingDeck } = dealCard(newDeck);
-    newDeck = remainingDeck;
-    playerHand = addCardToHand(playerHand, card);
-  }
-  
-  // Deal two cards to dealer
-  for (let i = 0; i < 2; i++) {
-    const { card, remainingDeck } = dealCard(newDeck);
-    newDeck = remainingDeck;
-    dealerHand = addCardToHand(dealerHand, card);
+  // Debug mode: force a split opportunity
+  if (debugMode?.enabled && debugMode?.forceSplitHands) {
+    // Find two cards with the same rank in the deck for testing
+    const deckCopy = [...newDeck];
+    
+    // Find first card with rank 8, 9, or 10 (good split candidates)
+    const goodRanks = ['8', '9', '10', 'J', 'Q', 'K'];
+    const firstCardIndex = deckCopy.findIndex(card => goodRanks.includes(card.rank));
+    
+    if (firstCardIndex >= 0) {
+      const firstCard = deckCopy[firstCardIndex];
+      deckCopy.splice(firstCardIndex, 1);
+      
+      // Find a matching rank
+      const secondCardIndex = deckCopy.findIndex(card => card.rank === firstCard.rank);
+      
+      if (secondCardIndex >= 0) {
+        const secondCard = deckCopy[secondCardIndex];
+        deckCopy.splice(secondCardIndex, 1);
+        
+        // Add the pair to player hand
+        playerHand = addCardToHand(playerHand, firstCard);
+        playerHand = addCardToHand(playerHand, secondCard);
+        
+        // Deal dealer cards normally
+        for (let i = 0; i < 2; i++) {
+          const { card, remainingDeck } = dealCard(deckCopy);
+          deckCopy.splice(0, 1);
+          dealerHand = addCardToHand(dealerHand, card);
+        }
+        
+        newDeck = deckCopy;
+      } else {
+        // Fallback to normal dealing if no match found
+        for (let i = 0; i < 2; i++) {
+          const { card, remainingDeck } = dealCard(newDeck);
+          newDeck = remainingDeck;
+          playerHand = addCardToHand(playerHand, card);
+        }
+        
+        for (let i = 0; i < 2; i++) {
+          const { card, remainingDeck } = dealCard(newDeck);
+          newDeck = remainingDeck;
+          dealerHand = addCardToHand(dealerHand, card);
+        }
+      }
+    }
+  } else {
+    // Normal dealing
+    // Deal two cards to player
+    for (let i = 0; i < 2; i++) {
+      const { card, remainingDeck } = dealCard(newDeck);
+      newDeck = remainingDeck;
+      playerHand = addCardToHand(playerHand, card);
+    }
+    
+    // Deal two cards to dealer
+    for (let i = 0; i < 2; i++) {
+      const { card, remainingDeck } = dealCard(newDeck);
+      newDeck = remainingDeck;
+      dealerHand = addCardToHand(dealerHand, card);
+    }
   }
   
   const canDouble = canDoubleDown(playerHand);

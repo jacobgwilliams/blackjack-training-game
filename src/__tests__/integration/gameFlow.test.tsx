@@ -526,7 +526,7 @@ describe('Game Flow Integration Tests', () => {
       });
       
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Get balance after first round

@@ -60,6 +60,10 @@ export interface GameSettings {
   dealerHitsSoft17: boolean;
   doubleAfterSplit: boolean;
   resplitAces: boolean;
+  debugMode?: {
+    enabled: boolean;
+    forceSplitHands?: boolean;
+  };
 }
 
 export interface PlayerStatistics {

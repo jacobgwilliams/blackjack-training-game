@@ -308,3 +308,71 @@
     color: #f9fafb;
   }
 }
+
+/* Settings Modal */
+.settings-content h3 {
+  margin: 1.5rem 0 0.75rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.settings-content h3:first-child {
+  margin-top: 0;
+}
+
+.setting-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(249, 250, 251, 0.5);
+  border-radius: 0.5rem;
+}
+
+.setting-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.setting-label input[type="checkbox"] {
+  margin-top: 0.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+}
+
+.setting-text {
+  flex: 1;
+}
+
+.setting-text strong {
+  display: block;
+  color: #111827;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.setting-text small {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .settings-content h3 {
+    color: #f9fafb;
+  }
+  
+  .setting-item {
+    background: rgba(31, 41, 55, 0.5);
+  }
+  
+  .setting-text strong {
+    color: #f9fafb;
+  }
+  
+  .setting-text small {
+    color: #9ca3af;
+  }
+}
