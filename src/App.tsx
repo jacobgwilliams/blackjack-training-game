@@ -351,6 +351,9 @@ function App() {
         <div className="settings-content">
           <h3>Game Settings</h3>
           <div className="setting-item">
+            <p style={{ fontSize: '0.75rem', color: '#fbbf24', marginBottom: '1rem', fontStyle: 'italic' }}>
+              ⚠️ Note: Changing shoe size will shuffle the entire deck and start a new game.
+            </p>
             <label className="setting-label">
               <span className="setting-text">
                 <strong>Shoe Size (Number of Decks)</strong>
