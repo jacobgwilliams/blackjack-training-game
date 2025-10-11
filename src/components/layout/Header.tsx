@@ -6,7 +6,10 @@ interface HeaderProps {
   onShowRules?: () => void;
   onShowStatistics?: () => void;
   onShowSettings?: () => void;
-  onNewGame?: () => void;
+  onResetGame?: () => void;
+  onToggleStrategyGrid?: () => void;
+  onToggleStrategyHints?: () => void;
+  showStrategyHints?: boolean;
   currentBalance?: number;
 }
 
@@ -14,7 +17,10 @@ export function Header({
   onShowRules,
   onShowStatistics,
   onShowSettings,
-  onNewGame,
+  onResetGame,
+  onToggleStrategyGrid,
+  onToggleStrategyHints,
+  showStrategyHints = true,
   currentBalance = 0,
 }: HeaderProps) {
   return (
@@ -37,14 +43,36 @@ export function Header({
         
         <div className="header-right">
           <nav className="header-nav">
-            {onNewGame && (
+            {onResetGame && (
               <Button
                 variant="primary"
                 size="small"
-                onClick={onNewGame}
+                onClick={onResetGame}
                 className="header-nav-button"
               >
-                New Game
+                Reset Game
+              </Button>
+            )}
+            
+            {onToggleStrategyGrid && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={onToggleStrategyGrid}
+                className="header-nav-button"
+              >
+                Strategy Grid
+              </Button>
+            )}
+            
+            {onToggleStrategyHints && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={onToggleStrategyHints}
+                className="header-nav-button"
+              >
+                {showStrategyHints ? 'Hide Hints' : 'Show Hints'}
               </Button>
             )}
             

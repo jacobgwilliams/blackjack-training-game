@@ -10,7 +10,7 @@ interface GameBoardProps {
   gameState: GameState;
   onPlayerAction: (action: PlayerAction) => void;
   onDealerPlay: () => void;
-  onNewGame: () => void;
+  onDeal: () => void;
   showStrategyHints?: boolean;
 }
 
@@ -18,7 +18,7 @@ export function GameBoard({
   gameState,
   onPlayerAction,
   onDealerPlay,
-  onNewGame,
+  onDeal,
   showStrategyHints = true,
 }: GameBoardProps) {
   const dealerUpcard = gameState.dealerHand.cards[0] || null;
@@ -67,13 +67,6 @@ export function GameBoard({
   return (
     <div className="game-board">
       <div className="game-info">
-        <Button
-          variant="secondary"
-          size="small"
-          onClick={() => setShowStrategyGrid(true)}
-        >
-          Show Strategy Grid
-        </Button>
         <div className="game-balance">
           Balance: ${gameState.playerScore}
         </div>
@@ -183,9 +176,9 @@ export function GameBoard({
             </div>
             <Button
               variant="primary"
-              onClick={onNewGame}
+              onClick={onDeal}
             >
-              New Game
+              Deal
             </Button>
           </div>
         )}

@@ -76,7 +76,7 @@ describe('Betting Issue Debug', () => {
     expect(gameState.phase).toBe('player-turn');
     
     // Try to place another bet (should not work)
-    expect(() => placeBet(gameState, 50)).toThrow('Insufficient funds');
+    expect(() => placeBet(gameState, 50)).toThrow('Can only place bets during betting phase');
   });
 
   it('should validate bet amounts correctly', () => {

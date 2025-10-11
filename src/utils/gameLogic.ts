@@ -26,6 +26,10 @@ export function initializeGame(deck: Card[], startingBalance: number): GameState
  * Places a bet and starts the game
  */
 export function placeBet(gameState: GameState, betAmount: number): GameState {
+  if (gameState.phase !== 'betting') {
+    throw new Error('Can only place bets during betting phase');
+  }
+  
   if (betAmount > gameState.playerScore) {
     throw new Error('Insufficient funds');
   }

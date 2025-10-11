@@ -4,6 +4,7 @@ import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
 import { Modal } from './components/ui/Modal';
 import { Button } from './components/ui/Button';
+import { StrategyGrid } from './components/game/StrategyGrid';
 import { useGameState } from './hooks/useGameState';
 import { useStatistics } from './hooks/useStatistics';
 import { DEFAULT_GAME_SETTINGS } from './constants/gameRules';
@@ -14,8 +15,10 @@ function App() {
   const [showRules, setShowRules] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showStrategy, setShowStrategy] = useState(false);
+  const [showStrategyGrid, setShowStrategyGrid] = useState(false);
+  const [showStrategyGuide, setShowStrategyGuide] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showStrategyHints, setShowStrategyHints] = useState(true);
   
   const { gameState, settings, statistics, actions } = useGameState(DEFAULT_GAME_SETTINGS);
   const { updateGameResult, updateBalance, updateHandStats } = useStatistics();
@@ -92,7 +95,10 @@ function App() {
         onShowRules={() => setShowRules(true)}
         onShowStatistics={() => setShowStatistics(true)}
         onShowSettings={() => setShowSettings(true)}
-        onNewGame={handleNewGame}
+        onResetGame={handleNewGame}
+        onToggleStrategyGrid={() => setShowStrategyGrid(!showStrategyGrid)}
+        onToggleStrategyHints={() => setShowStrategyHints(!showStrategyHints)}
+        showStrategyHints={showStrategyHints}
         currentBalance={gameState.playerScore}
       />
       
@@ -142,16 +148,21 @@ function App() {
             gameState={gameState}
             onPlayerAction={handlePlayerAction}
             onDealerPlay={handleDealerPlay}
-            onNewGame={handleNewGame}
-            showStrategyHints={true}
+            onDeal={handleNewGame}
+            showStrategyHints={showStrategyHints}
           />
         )}
       </main>
       
       <Footer 
         onShowRules={() => setShowRules(true)}
-        onShowStrategy={() => setShowStrategy(true)}
+        onShowStrategy={() => setShowStrategyGuide(true)}
         onShowHelp={() => setShowHelp(true)}
+      />
+      
+      <StrategyGrid
+        isOpen={showStrategyGrid}
+        onClose={() => setShowStrategyGrid(false)}
       />
       
       {/* Rules Modal */}
@@ -258,14 +269,14 @@ function App() {
           <p>Settings will be available in a future update.</p>
         </div>
       </Modal>
-      
-      {/* Strategy Modal */}
+
+      {/* Strategy Guide Modal */}
       <Modal
-        isOpen={showStrategy}
-        onClose={() => setShowStrategy(false)}
+        isOpen={showStrategyGuide}
+        onClose={() => setShowStrategyGuide(false)}
         title="Basic Strategy Guide"
       >
-        <div className="strategy-content">
+        <div className="strategy-guide-content">
           <h3>Basic Strategy Tips</h3>
           <ul>
             <li><strong>Always split Aces and 8s</strong> - These are the most profitable splits</li>

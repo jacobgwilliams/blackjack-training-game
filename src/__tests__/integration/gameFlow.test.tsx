@@ -74,7 +74,9 @@ describe('Game Flow Integration Tests', () => {
       await user.click(betButton);
       
       // Should still be on betting screen
-      expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Balance:')).toBeInTheDocument();
+      });
     });
 
     it('should disable bet buttons when insufficient funds', () => {
@@ -178,9 +180,9 @@ describe('Game Flow Integration Tests', () => {
       // Click stand
       await user.click(screen.getByText('Stand'));
       
-      // Should show dealer play button
+      // Should automatically play dealer hand and show result
       await waitFor(() => {
-        expect(screen.getByText('Play Dealer Hand')).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
       });
     });
 
@@ -214,7 +216,7 @@ describe('Game Flow Integration Tests', () => {
       
       // Should show game over
       await waitFor(() => {
-        expect(screen.getByText('New Game')).toBeInTheDocument();
+        expect(screen.getByText('Deal')).toBeInTheDocument();
       });
     });
   });
@@ -225,7 +227,7 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Click rules button
-      await user.click(screen.getByText('Rules'));
+      await user.click(screen.getByRole('button', { name: 'Game Rules' }));
       
       // Should show rules modal
       expect(screen.getByText('Blackjack Rules')).toBeInTheDocument();

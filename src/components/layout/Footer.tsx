@@ -14,7 +14,7 @@ export function Footer({ className = '', onShowRules, onShowStrategy, onShowHelp
       <div className="footer-content">
         <div className="footer-left">
           <p className="footer-text">
-            © 2024 Blackjack Training Game. Built for educational purposes.
+            © 2025 Jacob Williams. Built for educational purposes.
           </p>
         </div>
         
