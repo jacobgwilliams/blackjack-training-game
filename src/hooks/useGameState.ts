@@ -61,6 +61,11 @@ function gameStateReducer(state: GameState, action: GameStateAction): GameState 
 export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTINGS) {
   const [settings, setSettings] = useState<GameSettings>(initialSettings);
   
+  // Update settings when initialSettings changes (e.g., debug mode toggle)
+  useEffect(() => {
+    setSettings(initialSettings);
+  }, [initialSettings.debugMode?.enabled, initialSettings.debugMode?.forceSplitHands]);
+  
   // Load saved balance from localStorage, fallback to default
   const savedBalance = loadBalance();
   const startingBalance = savedBalance !== null ? savedBalance : initialSettings.startingBalance;

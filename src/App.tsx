@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
@@ -23,14 +23,14 @@ function App() {
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
   const [debugSplitMode, setDebugSplitMode] = useState(false);
   
-  // Apply debug mode to settings
-  const gameSettings = {
+  // Apply debug mode to settings (memoized to avoid unnecessary recreations)
+  const gameSettings = useMemo(() => ({
     ...DEFAULT_GAME_SETTINGS,
     debugMode: {
       enabled: debugSplitMode,
       forceSplitHands: debugSplitMode,
     },
-  };
+  }), [debugSplitMode]);
   
   const { gameState, settings, statistics, actions } = useGameState(gameSettings);
   const lastProcessedResult = useRef<string | null>(null);
@@ -342,10 +342,23 @@ function App() {
               <span className="setting-text">
                 <strong>Force Split Hands (Debug)</strong>
                 <br />
-                <small>Always deal a pair for testing split functionality</small>
+                <small>Always deal a pair for testing split functionality. Place a new bet to see the effect.</small>
               </span>
             </label>
           </div>
+          {debugSplitMode && (
+            <div style={{ 
+              marginTop: '0.5rem', 
+              padding: '0.75rem', 
+              background: 'rgba(59, 130, 246, 0.1)', 
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              borderRadius: '0.5rem',
+              fontSize: '0.875rem',
+              color: '#3b82f6'
+            }}>
+              ℹ️ Debug mode active! Your next hand will be a pair.
+            </div>
+          )}
           
           <h3>Strategy Hints</h3>
           <div className="setting-item">
