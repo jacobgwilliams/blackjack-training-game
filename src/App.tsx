@@ -18,6 +18,7 @@ function App() {
   const [showStrategyGrid, setShowStrategyGrid] = useState(false);
   const [showStrategyGuide, setShowStrategyGuide] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [showStrategyHints, setShowStrategyHints] = useState(true);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
@@ -210,6 +211,7 @@ function App() {
         onShowRules={() => setShowRules(true)}
         onShowStrategy={() => setShowStrategyGuide(true)}
         onShowHelp={() => setShowHelp(true)}
+        onShowAbout={() => setShowAbout(true)}
       />
       
       <StrategyGrid
@@ -567,6 +569,63 @@ function App() {
             <li>Learn when to take insurance and when to surrender</li>
             <li>Understand the difference between hard and soft totals</li>
           </ul>
+        </div>
+      </Modal>
+      
+      {/* About Modal */}
+      <Modal
+        isOpen={showAbout}
+        onClose={() => setShowAbout(false)}
+        title="About Blackjack Training Game"
+      >
+        <div className="about-content">
+          <h3>Our Mission</h3>
+          <p>
+            The goal of this app is to help people learn the patterns that exist in blackjack 
+            and to develop confidence when they're in a casino setting. Through interactive 
+            gameplay, real-time strategy hints, and comprehensive training modes, we aim to 
+            make blackjack strategy accessible and understandable for everyone.
+          </p>
+          
+          <h3>What You'll Learn</h3>
+          <ul>
+            <li><strong>Basic Strategy:</strong> The mathematically optimal way to play every hand</li>
+            <li><strong>Pattern Recognition:</strong> Understanding when to hit, stand, double down, or split</li>
+            <li><strong>Risk Management:</strong> Learning when to take insurance and when to surrender</li>
+            <li><strong>Confidence Building:</strong> Practice in a risk-free environment before playing for real money</li>
+          </ul>
+          
+          <h3>Features</h3>
+          <ul>
+            <li>Real-time strategy recommendations with educational explanations</li>
+            <li>Comprehensive training modes for specific scenarios</li>
+            <li>Statistics tracking to monitor your improvement</li>
+            <li>Full split hand functionality with side-by-side play</li>
+            <li>Responsive design that works on all devices</li>
+          </ul>
+          
+          <h3>Feedback & Support</h3>
+          <p>
+            Found a bug or have a suggestion? We'd love to hear from you! 
+            Please report issues, bugs, or feature requests through our GitHub repository.
+          </p>
+          <p>
+            <a 
+              href="https://github.com/jacobgwilliams/blackjack-training-game/issues" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="github-issues-link"
+            >
+              🐛 Report Issues & Bugs →
+            </a>
+          </p>
+          
+          <h3>Responsible Gaming</h3>
+          <p>
+            This training tool is designed for educational purposes. Always gamble responsibly 
+            and within your means. If you or someone you know has a gambling problem, 
+            please seek help from professional resources.
+          </p>
         </div>
       </Modal>
       

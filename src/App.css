@@ -144,13 +144,15 @@
 }
 
 .strategy-content,
-.help-content {
+.help-content,
+.about-content {
   max-height: 60vh;
   overflow-y: auto;
 }
 
 .strategy-content h3,
-.help-content h3 {
+.help-content h3,
+.about-content h3 {
   margin: 1.5rem 0 0.75rem 0;
   font-size: 1.25rem;
   font-weight: 600;
@@ -158,12 +160,14 @@
 }
 
 .strategy-content h3:first-child,
-.help-content h3:first-child {
+.help-content h3:first-child,
+.about-content h3:first-child {
   margin-top: 0;
 }
 
 .strategy-content p,
-.help-content p {
+.help-content p,
+.about-content p {
   margin: 0 0 1rem 0;
   color: #374151;
   line-height: 1.6;
@@ -171,20 +175,23 @@
 
 .strategy-content ul,
 .help-content ul,
-.help-content ol {
+.help-content ol,
+.about-content ul {
   margin: 0 0 1rem 0;
   padding-left: 1.5rem;
   color: #374151;
 }
 
 .strategy-content li,
-.help-content li {
+.help-content li,
+.about-content li {
   margin-bottom: 0.5rem;
   line-height: 1.5;
 }
 
 .strategy-content strong,
-.help-content strong {
+.help-content strong,
+.about-content strong {
   color: #111827;
   font-weight: 600;
 }
@@ -397,5 +404,70 @@
   
   .setting-text small {
     color: #9ca3af;
+  }
+  
+  .strategy-content h3,
+  .help-content h3,
+  .about-content h3 {
+    color: #f9fafb;
+  }
+  
+  .strategy-content p,
+  .help-content p,
+  .about-content p,
+  .strategy-content li,
+  .help-content li,
+  .about-content li {
+    color: #d1d5db;
+  }
+  
+  .strategy-content strong,
+  .help-content strong,
+  .about-content strong {
+    color: #f9fafb;
+  }
+}
+
+/* GitHub Issues Link */
+.github-issues-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+  color: #f6f8fa;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid #30363d;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.github-issues-link:hover {
+  background: linear-gradient(135deg, #1a1e22 0%, #24292e 100%);
+  border-color: #58a6ff;
+  color: #58a6ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.github-issues-link:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .github-issues-link {
+    background: linear-gradient(135deg, #f6f8fa 0%, #e1e4e8 100%);
+    color: #24292e;
+    border-color: #d1d5db;
+  }
+  
+  .github-issues-link:hover {
+    background: linear-gradient(135deg, #e1e4e8 0%, #f6f8fa 100%);
+    border-color: #0366d6;
+    color: #0366d6;
   }
 }

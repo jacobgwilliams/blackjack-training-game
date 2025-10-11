@@ -5,15 +5,16 @@ interface FooterProps {
   onShowRules?: () => void;
   onShowStrategy?: () => void;
   onShowHelp?: () => void;
+  onShowAbout?: () => void;
 }
 
-export function Footer({ className = '', onShowRules, onShowStrategy, onShowHelp }: FooterProps) {
+export function Footer({ className = '', onShowRules, onShowStrategy, onShowHelp, onShowAbout }: FooterProps) {
   return (
     <footer className={`footer ${className}`}>
       <div className="footer-content">
         <div className="footer-left">
           <p className="footer-text">
-            © 2025 Jacob Williams. Built for educational purposes.
+            © 2025 Jacob Williams
           </p>
           <p className="footer-text footer-responsible-gaming">
             <a 
@@ -56,6 +57,13 @@ export function Footer({ className = '', onShowRules, onShowStrategy, onShowHelp
               aria-label="Help & Support"
             >
               Help
+            </button>
+            <button 
+              onClick={onShowAbout}
+              className="footer-link"
+              aria-label="About"
+            >
+              About
             </button>
           </div>
         </div>
