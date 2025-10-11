@@ -586,7 +586,7 @@ function App() {
       <Modal
         isOpen={showAbout}
         onClose={() => setShowAbout(false)}
-        title="About Blackjack Training Game"
+        title="About PracticeBlackjack.org"
       >
         <div className="about-content">
           <h3>What This Is All About</h3>
