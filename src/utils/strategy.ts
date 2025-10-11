@@ -15,11 +15,11 @@ const HARD_TOTALS_STRATEGY: (PlayerAction | 'H' | 'S')[][] = [
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 9
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 10
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 11
-  ['H', 'H', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'], // 12
-  ['H', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'], // 13
-  ['H', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'], // 14
-  ['H', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'], // 15
-  ['H', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'], // 16
+  ['H', 'H', 'H', 'S', 'S', 'S', 'H', 'H', 'H', 'H'], // 12
+  ['H', 'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H'], // 13
+  ['H', 'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H'], // 14
+  ['H', 'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H'], // 15
+  ['H', 'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H'], // 16
   ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // 17
   ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // 18
   ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // 19
@@ -47,12 +47,12 @@ const PAIRS_STRATEGY: (PlayerAction | 'H' | 'S' | 'P')[][] = [
   ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], // A,A
   ['H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H'], // 2,2
   ['H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H'], // 3,3
-  ['H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'], // 4,4
+  ['H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H'], // 4,4
   ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // 5,5
-  ['H', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H'], // 6,6
-  ['H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H'], // 7,7
+  ['H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H'], // 6,6
+  ['H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H'], // 7,7
   ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], // 8,8
-  ['S', 'P', 'P', 'P', 'P', 'S', 'P', 'P', 'S', 'S'], // 9,9
+  ['S', 'P', 'P', 'P', 'P', 'P', 'S', 'P', 'P', 'S'], // 9,9
   ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // 10,10
 ];
 
@@ -110,8 +110,8 @@ export function getBasicStrategyRecommendation(
 ): StrategyRecommendation {
   const dealerIndex = getDealerUpcardValue(dealerUpcard);
   
-  // Check for pairs first
-  if (isPair(playerHand)) {
+  // Check for pairs first (except 5,5 which should be treated as hard 10)
+  if (isPair(playerHand) && !(playerHand.cards[0].rank === '5')) {
     const pairIndex = getPairValue(playerHand);
     const action = PAIRS_STRATEGY[pairIndex][dealerIndex];
     
@@ -123,12 +123,39 @@ export function getBasicStrategyRecommendation(
         reasoning: `Splitting ${pairRank}s vs dealer ${dealerUpcard.rank} gives you two chances to improve and maximizes long-term profit`,
         expectedValue: 0.1,
       };
+    } else if (action === 'H') {
+      const pairRank = playerHand.cards[0].rank;
+      return {
+        action: 'hit',
+        confidence: 90,
+        reasoning: `Pair of ${pairRank}s vs dealer ${dealerUpcard.rank}. Splitting isn't optimal here - hitting gives you a better chance to improve`,
+        expectedValue: 0.05,
+      };
+    } else if (action === 'S') {
+      const pairRank = playerHand.cards[0].rank;
+      return {
+        action: 'stand',
+        confidence: 90,
+        reasoning: `Pair of ${pairRank}s vs dealer ${dealerUpcard.rank}. Standing is the best play here - don't risk busting`,
+        expectedValue: 0.05,
+      };
     }
+  }
+  
+  // Special case: Pair of 5s should be treated as hard 10 for double down
+  if (isPair(playerHand) && playerHand.cards[0].rank === '5') {
+    // Pair of 5s should double down vs any dealer card
+    return {
+      action: 'double-down',
+      confidence: 98,
+      reasoning: `Pair of 5s vs dealer ${dealerUpcard.rank}. Treating as hard 10 - doubling down maximizes your advantage`,
+      expectedValue: 0.15,
+    };
   }
   
   // Check for soft totals
   if (isSoftTotal(playerHand)) {
-    const softIndex = Math.min(playerHand.total - 12, SOFT_TOTALS_STRATEGY.length - 1);
+    const softIndex = Math.min(playerHand.total - 13, SOFT_TOTALS_STRATEGY.length - 1);
     const action = SOFT_TOTALS_STRATEGY[softIndex][dealerIndex];
     
     if (action === 'H') {
@@ -246,18 +273,15 @@ export function getDoubleDownRecommendation(
   const hardDoubleDowns = [
     [9, 2, 3, 4, 5], // 9 vs 3-6 (indices 2,3,4,5)
     [10, 1, 2, 3, 4, 5, 6, 7, 8], // 10 vs 2-9 (indices 1-8)
-    [11, 1, 2, 3, 4, 5, 6, 7, 8, 9], // 11 vs 2-10 (indices 1-9)
+    [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // 11 vs A-10 (indices 0-9)
   ];
   
   // Soft totals that should double down
   // Note: dealer values are INDICES (0=A, 1=2, 2=3, 3=4, 4=5, 5=6, 6=7, 7=8, 8=9, 9=10)
   const softDoubleDowns = [
-    [13, 4, 5], // A,2 vs 5-6 (indices 4,5)
-    [14, 4, 5], // A,3 vs 5-6 (indices 4,5)
-    [15, 3, 4, 5], // A,4 vs 4-6 (indices 3,4,5)
-    [16, 3, 4, 5], // A,5 vs 4-6 (indices 3,4,5)
     [17, 2, 3, 4, 5], // A,6 vs 3-6 (indices 2,3,4,5)
-    [18, 1, 2, 3, 4, 5], // A,7 vs 2-6 (indices 1,2,3,4,5)
+    [18, 2, 3, 4, 5], // A,7 vs 3-6 (indices 2,3,4,5)
+    [19, 5], // A,8 vs 6 (index 5)
   ];
   
   // Check hard totals (only if hand is NOT soft)
