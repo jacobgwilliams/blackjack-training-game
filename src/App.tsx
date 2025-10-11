@@ -7,7 +7,6 @@ import { Button } from './components/ui/Button';
 import { ConfirmModal } from './components/ui/ConfirmModal';
 import { StrategyGrid } from './components/game/StrategyGrid';
 import { useGameState } from './hooks/useGameState';
-import { useStatistics } from './hooks/useStatistics';
 import { DEFAULT_GAME_SETTINGS } from './constants/gameRules';
 import { PlayerAction } from './types/game';
 import './App.css';
@@ -24,7 +23,6 @@ function App() {
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
   
   const { gameState, settings, statistics, actions } = useGameState(DEFAULT_GAME_SETTINGS);
-  const { updateGameResult, updateBalance, updateHandStats } = useStatistics();
   
   // Initialize game on mount
   useEffect(() => {
@@ -34,15 +32,9 @@ function App() {
   // Update statistics when game ends
   useEffect(() => {
     if (gameState.phase === 'game-over' && gameState.result) {
-      updateGameResult(gameState.result, gameState.currentBet);
-      updateBalance(gameState.playerScore);
-      updateHandStats(
-        gameState.playerHand.total,
-        gameState.playerHand.isBlackjack,
-        gameState.playerHand.isBusted
-      );
+      actions.updateStatistics(gameState.result);
     }
-  }, [gameState.phase, gameState.result, gameState.currentBet, gameState.playerScore, gameState.playerHand, updateGameResult, updateBalance, updateHandStats]);
+  }, [gameState.phase, gameState.result, actions]);
   
   const handlePlayerAction = async (action: string) => {
     try {
