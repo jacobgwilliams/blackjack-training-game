@@ -191,29 +191,47 @@ function hitPlayer(gameState: GameState): GameState {
       // Move to next hand or dealer turn
       if (activeIndex < newSplitHands.length - 1) {
         const nextIndex = activeIndex + 1;
-        newGameState = {
-          ...newGameState,
+        return {
+          ...gameState,
+          deck: remainingDeck,
           playerHand: newSplitHands[nextIndex].hand,
+          splitHands: newSplitHands,
           activeSplitHandIndex: nextIndex,
           canDoubleDown: true, // Can double on next hand
+          canSplit: false,
+          canSurrender: false,
+          phase: 'player-turn',
+          result: null,
         };
       } else {
         // All hands complete, move to dealer turn or game over
         const allHandsBusted = newSplitHands.every(h => h.hand.isBusted);
         newPhase = allHandsBusted ? 'game-over' : 'dealer-turn';
+        return {
+          ...gameState,
+          deck: remainingDeck,
+          playerHand: newPlayerHand,
+          splitHands: newSplitHands,
+          canDoubleDown: false,
+          canSplit: false,
+          canSurrender: false,
+          phase: newPhase,
+          result: allHandsBusted ? 'dealer-wins' : null,
+        };
       }
     }
     
-    newGameState = {
-      ...newGameState,
+    // Hand didn't bust - continue playing this hand
+    return {
+      ...gameState,
       deck: remainingDeck,
       playerHand: newPlayerHand,
       splitHands: newSplitHands,
       canDoubleDown: false, // Can't double after hitting
       canSplit: false,
       canSurrender: false,
-      phase: newPhase,
-      result,
+      phase: 'player-turn',
+      result: null,
     };
   } else {
     // Normal hit (non-split)
@@ -286,29 +304,85 @@ function doubleDown(gameState: GameState): GameState {
   const { card, remainingDeck } = dealCard(gameState.deck);
   const newPlayerHand = addCardToHand(gameState.playerHand, card);
   
-  const newBet = gameState.currentBet * 2;
-  const newScore = gameState.playerScore - gameState.currentBet;
-  
-  let newPhase: GamePhase = 'dealer-turn';
-  let result: GameResult | null = null;
-  
-  if (newPlayerHand.isBusted) {
-    newPhase = 'game-over';
-    result = 'dealer-wins';
+  if (gameState.isSplit) {
+    // Handle double down for split hands
+    const newSplitHands = [...gameState.splitHands];
+    const activeIndex = gameState.activeSplitHandIndex;
+    
+    // Double the bet for this specific hand
+    const additionalBet = newSplitHands[activeIndex].bet;
+    const newScore = gameState.playerScore - additionalBet;
+    
+    newSplitHands[activeIndex] = {
+      ...newSplitHands[activeIndex],
+      hand: newPlayerHand,
+      bet: newSplitHands[activeIndex].bet * 2,
+      isComplete: true, // Double down ends the hand
+    };
+    
+    // If busted, mark as dealer win
+    if (newPlayerHand.isBusted) {
+      newSplitHands[activeIndex].result = 'dealer-wins';
+    }
+    
+    // Move to next hand or dealer turn
+    if (activeIndex < newSplitHands.length - 1) {
+      const nextIndex = activeIndex + 1;
+      return {
+        ...gameState,
+        deck: remainingDeck,
+        playerHand: newSplitHands[nextIndex].hand,
+        splitHands: newSplitHands,
+        activeSplitHandIndex: nextIndex,
+        playerScore: newScore,
+        canDoubleDown: true, // Can double on next hand
+        canSplit: false,
+        canSurrender: false,
+        phase: 'player-turn',
+        result: null,
+      };
+    } else {
+      // All hands complete, move to dealer turn or game over
+      const allHandsBusted = newSplitHands.every(h => h.hand.isBusted);
+      return {
+        ...gameState,
+        deck: remainingDeck,
+        playerHand: newPlayerHand,
+        splitHands: newSplitHands,
+        playerScore: newScore,
+        canDoubleDown: false,
+        canSplit: false,
+        canSurrender: false,
+        phase: allHandsBusted ? 'game-over' : 'dealer-turn',
+        result: allHandsBusted ? 'dealer-wins' : null,
+      };
+    }
+  } else {
+    // Normal double down (non-split)
+    const newBet = gameState.currentBet * 2;
+    const newScore = gameState.playerScore - gameState.currentBet;
+    
+    let newPhase: GamePhase = 'dealer-turn';
+    let result: GameResult | null = null;
+    
+    if (newPlayerHand.isBusted) {
+      newPhase = 'game-over';
+      result = 'dealer-wins';
+    }
+    
+    return {
+      ...gameState,
+      deck: remainingDeck,
+      playerHand: newPlayerHand,
+      currentBet: newBet,
+      playerScore: newScore,
+      canDoubleDown: false,
+      canSplit: false,
+      canSurrender: false,
+      phase: newPhase,
+      result,
+    };
   }
-  
-  return {
-    ...gameState,
-    deck: remainingDeck,
-    playerHand: newPlayerHand,
-    currentBet: newBet,
-    playerScore: newScore,
-    canDoubleDown: false,
-    canSplit: false,
-    canSurrender: false,
-    phase: newPhase,
-    result,
-  };
 }
 
 /**
