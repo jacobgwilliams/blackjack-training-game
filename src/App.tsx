@@ -317,7 +317,7 @@ function App() {
         onClose={() => setShowStrategyGuide(false)}
         title="Basic Strategy Guide"
       >
-        <div className="strategy-guide-content">
+        <div className="strategy-content">
           <h3>Basic Strategy Tips</h3>
           <ul>
             <li><strong>Always split Aces and 8s</strong> - These are the most profitable splits</li>
