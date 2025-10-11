@@ -51,6 +51,9 @@ export interface GameState {
   // Shoe management
   showShuffleNotification?: boolean;
   shoeSize: number; // Track current shoe size for reshuffling
+  // Win/loss tracking
+  lastHandWinnings?: number; // Amount won/lost in the last hand
+  previousBalance?: number; // Balance before the last hand
 }
 
 export type DebugScenario = 'none' | 'double-down' | 'hit' | 'stand' | 'split';

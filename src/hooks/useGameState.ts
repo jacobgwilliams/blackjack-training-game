@@ -104,6 +104,8 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
     activeSplitHandIndex: 0,
     shoeSize: initialSettings.shoeSize || 6,
     showShuffleNotification: false,
+    lastHandWinnings: undefined,
+    previousBalance: undefined,
   });
   
   // Save balance to localStorage whenever it changes

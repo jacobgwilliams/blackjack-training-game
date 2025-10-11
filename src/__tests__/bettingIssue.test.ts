@@ -9,7 +9,7 @@ import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
 describe('Betting Issue Debug', () => {
   it('should properly transition from betting to dealing phase', () => {
     const deck = shuffleDeck(createShoe(6));
-    const gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    const gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Initial state should be betting
     expect(gameState.phase).toBe('betting');
@@ -37,7 +37,7 @@ describe('Betting Issue Debug', () => {
 
   it('should maintain proper state transitions', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Step 1: Betting
     expect(gameState.phase).toBe('betting');
@@ -64,7 +64,7 @@ describe('Betting Issue Debug', () => {
 
   it.skip('should handle multiple bet attempts correctly', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // First bet attempt
     gameState = placeBet(gameState, 25);

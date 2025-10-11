@@ -111,6 +111,24 @@ export function GameBoard({
         </div>
       </div>
       
+      {/* Win/Loss Display */}
+      {gameState.phase === 'game-over' && gameState.lastHandWinnings !== undefined && gameState.previousBalance !== undefined && (
+        <div className="win-loss-display">
+          <div className="win-loss-amount">
+            {gameState.lastHandWinnings > 0 ? (
+              <span className="win">+${gameState.lastHandWinnings}</span>
+            ) : gameState.lastHandWinnings < 0 ? (
+              <span className="loss">${gameState.lastHandWinnings}</span>
+            ) : (
+              <span className="push">$0</span>
+            )}
+          </div>
+          <div className="balance-change">
+            Balance: ${gameState.previousBalance} → ${gameState.playerScore}
+          </div>
+        </div>
+      )}
+      
       <div className="game-hands">
         <Hand
           hand={gameState.dealerHand}

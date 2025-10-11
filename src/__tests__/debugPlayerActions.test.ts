@@ -10,7 +10,7 @@ import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
 describe('Debug Player Actions', () => {
   it('should handle hit action without crashing', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Place bet and deal cards
     gameState = placeBet(gameState, 25);
@@ -29,7 +29,7 @@ describe('Debug Player Actions', () => {
 
   it('should handle stand action without crashing', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Place bet and deal cards
     gameState = placeBet(gameState, 25);
@@ -47,7 +47,7 @@ describe('Debug Player Actions', () => {
 
   it('should handle double down action without crashing', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Place bet and deal cards
     gameState = placeBet(gameState, 25);
@@ -66,7 +66,7 @@ describe('Debug Player Actions', () => {
 
   it('should handle surrender action without crashing', () => {
     const deck = shuffleDeck(createShoe(6));
-    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
+    let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance, 6);
     
     // Place bet and deal cards
     gameState = placeBet(gameState, 25);

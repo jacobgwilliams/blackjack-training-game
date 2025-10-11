@@ -25,6 +25,8 @@ export function initializeGame(deck: Card[], startingBalance: number, shoeSize: 
     activeSplitHandIndex: 0,
     shoeSize,
     showShuffleNotification: false,
+    lastHandWinnings: undefined,
+    previousBalance: undefined,
   };
 }
 
@@ -46,6 +48,8 @@ export function placeBet(gameState: GameState, betAmount: number): GameState {
     playerScore: gameState.playerScore - betAmount,
     phase: 'dealing',
     isGameActive: true,
+    lastHandWinnings: undefined,
+    previousBalance: undefined,
   };
 }
 
@@ -599,7 +603,6 @@ export function playDealerHand(gameState: GameState): GameState {
     // Calculate results for each split hand
     const newSplitHands = gameState.splitHands.map(splitHand => {
       const result = determineGameResult(splitHand.hand, dealerHand);
-      const winnings = calculateWinnings(splitHand.bet, result);
       return {
         ...splitHand,
         result,
@@ -612,6 +615,12 @@ export function playDealerHand(gameState: GameState): GameState {
       return total + calculateWinnings(splitHand.bet, splitHand.result!);
     }, 0);
     
+    // Calculate net winnings (profit/loss) for display
+    const totalBets = newSplitHands.reduce((total, splitHand) => {
+      return total + splitHand.bet;
+    }, 0);
+    const netWinnings = totalWinnings - totalBets;
+    
     // Use the first hand's result as the main result for statistics
     const primaryResult = newSplitHands[0].result!;
     
@@ -623,11 +632,16 @@ export function playDealerHand(gameState: GameState): GameState {
       playerScore: gameState.playerScore + totalWinnings,
       phase: 'game-over',
       result: primaryResult,
+      lastHandWinnings: netWinnings,
+      previousBalance: gameState.playerScore,
     };
   } else {
     // Normal (non-split) game
     const result = determineGameResult(gameState.playerHand, dealerHand);
     const winnings = calculateWinnings(gameState.currentBet, result);
+    
+    // Calculate net winnings (profit/loss) for display
+    const netWinnings = winnings - gameState.currentBet;
     
     return {
       ...gameState,
@@ -636,6 +650,8 @@ export function playDealerHand(gameState: GameState): GameState {
       playerScore: gameState.playerScore + winnings,
       phase: 'game-over',
       result,
+      lastHandWinnings: netWinnings,
+      previousBalance: gameState.playerScore,
     };
   }
 }
