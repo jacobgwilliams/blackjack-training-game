@@ -38,6 +38,21 @@
 .header-center {
   display: flex;
   align-items: center;
+  gap: 1rem;
+}
+
+.header-mode-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.header-mode-button {
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  min-height: 2rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .header-balance {

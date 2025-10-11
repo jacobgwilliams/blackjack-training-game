@@ -1,0 +1,234 @@
+.drills-mode {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.drills-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.drills-header h2 {
+  color: #f9fafb;
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.drills-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.drills-score {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.drills-streak {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.drills-scenario {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.scenario-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.player-cards,
+.dealer-card {
+  text-align: center;
+}
+
+.player-cards h3,
+.dealer-card h3 {
+  color: #d1d5db;
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.cards-display {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background: #1f2937;
+  color: #f9fafb;
+  border: 2px solid #374151;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  min-width: 3rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hand-total {
+  color: #10b981;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.scenario-question {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.scenario-question h3 {
+  color: #f9fafb;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.answer-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.answer-button {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  min-height: 3rem;
+}
+
+.answer-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.result-feedback {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-message {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.result-message.correct {
+  color: #10b981;
+}
+
+.result-message.incorrect {
+  color: #ef4444;
+}
+
+.explanation {
+  color: #d1d5db;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.explanation-text {
+  color: #9ca3af;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.next-scenario-button {
+  padding: 0.75rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.drills-controls {
+  text-align: center;
+}
+
+.exit-drills-button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .drills-mode {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .scenario-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .drills-stats {
+    gap: 1rem;
+  }
+  
+  .answer-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .drills-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .scenario-question h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .answer-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .cards-display {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card {
+    min-width: 2.5rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+}

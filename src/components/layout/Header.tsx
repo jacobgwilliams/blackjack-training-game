@@ -8,7 +8,9 @@ interface HeaderProps {
   onResetGame?: () => void;
   onToggleStrategyGrid?: () => void;
   onToggleStrategyHints?: () => void;
+  onToggleDrillsMode?: () => void;
   showStrategyHints?: boolean;
+  isDrillsMode?: boolean;
   currentBalance?: number;
 }
 
@@ -19,7 +21,9 @@ export function Header({
   onResetGame,
   onToggleStrategyGrid,
   onToggleStrategyHints,
+  onToggleDrillsMode,
   showStrategyHints = true,
+  isDrillsMode = false,
   currentBalance = 0,
 }: HeaderProps) {
   return (
@@ -33,7 +37,19 @@ export function Header({
         </div>
         
         <div className="header-center">
-          {currentBalance > 0 && (
+          {onToggleDrillsMode && (
+            <div className="header-mode-toggle">
+              <Button
+                variant={isDrillsMode ? "secondary" : "primary"}
+                size="small"
+                onClick={onToggleDrillsMode}
+                className="header-mode-button"
+              >
+                {isDrillsMode ? 'Play Hands' : 'Drills Mode'}
+              </Button>
+            </div>
+          )}
+          {currentBalance > 0 && !isDrillsMode && (
             <div className="header-balance">
               Balance: <span className="header-balance-amount">${currentBalance}</span>
             </div>

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
+import { DrillsMode } from './components/drills/DrillsMode';
 import { Modal } from './components/ui/Modal';
 import { Button } from './components/ui/Button';
 import { ConfirmModal } from './components/ui/ConfirmModal';
@@ -20,6 +21,7 @@ function App() {
   const [showHelp, setShowHelp] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [showStrategyHints, setShowStrategyHints] = useState(true);
+  const [isDrillsMode, setIsDrillsMode] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showResetStatsConfirm, setShowResetStatsConfirm] = useState(false);
   const [debugScenario, setDebugScenario] = useState<'none' | 'double-down' | 'hit' | 'stand' | 'split'>('none');
@@ -151,12 +153,18 @@ function App() {
         onResetGame={handleResetGameClick}
         onToggleStrategyGrid={() => setShowStrategyGrid(!showStrategyGrid)}
         onToggleStrategyHints={() => setShowStrategyHints(!showStrategyHints)}
+        onToggleDrillsMode={() => setIsDrillsMode(!isDrillsMode)}
         showStrategyHints={showStrategyHints}
+        isDrillsMode={isDrillsMode}
         currentBalance={gameState.playerScore}
       />
       
       <main className="app-main">
-        {gameState.phase === 'betting' && (
+        {isDrillsMode ? (
+          <DrillsMode onExitDrills={() => setIsDrillsMode(false)} />
+        ) : (
+          <>
+            {gameState.phase === 'betting' && (
           <div className="betting-screen">
             <div className="betting-content">
               <h2>Place Your Bet</h2>
@@ -204,6 +212,8 @@ function App() {
             showStrategyHints={showStrategyHints}
             trainingScenario={debugScenario}
           />
+        )}
+          </>
         )}
       </main>
       
