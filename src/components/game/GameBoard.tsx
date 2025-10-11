@@ -138,9 +138,6 @@ export function GameBoard({
           <div className="strategy-hint-reasoning">
             {strategy.primaryRecommendation.reasoning}
           </div>
-          <div className="strategy-hint-confidence">
-            Confidence: {strategy.primaryRecommendation.confidence}%
-          </div>
         </div>
       )}
       

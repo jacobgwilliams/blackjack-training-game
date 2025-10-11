@@ -112,10 +112,11 @@ export function getBasicStrategyRecommendation(
     const action = PAIRS_STRATEGY[pairIndex][dealerIndex];
     
     if (action === 'P') {
+      const pairRank = playerHand.cards[0].rank;
       return {
         action: 'split',
         confidence: 95,
-        reasoning: 'Basic strategy recommends splitting this pair',
+        reasoning: `Splitting ${pairRank}s vs dealer ${dealerUpcard.rank} gives you two chances to improve and maximizes long-term profit`,
         expectedValue: 0.1,
       };
     }
@@ -130,14 +131,14 @@ export function getBasicStrategyRecommendation(
       return {
         action: 'hit',
         confidence: 90,
-        reasoning: 'Basic strategy recommends hitting with this soft total',
+        reasoning: `With soft ${playerHand.total} vs dealer ${dealerUpcard.rank}, you can't bust on the next card - taking another gives you a chance to improve`,
         expectedValue: 0.05,
       };
     } else {
       return {
         action: 'stand',
         confidence: 90,
-        reasoning: 'Basic strategy recommends standing with this soft total',
+        reasoning: `Soft ${playerHand.total} is strong enough vs dealer ${dealerUpcard.rank}. The dealer is likely to bust, so stand and let them play`,
         expectedValue: 0.05,
       };
     }
@@ -148,19 +149,56 @@ export function getBasicStrategyRecommendation(
   const action = HARD_TOTALS_STRATEGY[hardIndex][dealerIndex];
   
   if (action === 'H') {
-    return {
-      action: 'hit',
-      confidence: 95,
-      reasoning: 'Basic strategy recommends hitting with this hard total',
-      expectedValue: 0.1,
-    };
+    const dealerIsWeak = ['4', '5', '6'].includes(dealerUpcard.rank);
+    const dealerIsStrong = ['10', 'J', 'Q', 'K', 'A'].includes(dealerUpcard.rank);
+    
+    if (playerHand.total <= 11) {
+      return {
+        action: 'hit',
+        confidence: 95,
+        reasoning: `With ${playerHand.total}, you can't bust. Always take another card to improve your hand`,
+        expectedValue: 0.1,
+      };
+    } else if (dealerIsStrong) {
+      return {
+        action: 'hit',
+        confidence: 95,
+        reasoning: `Your ${playerHand.total} vs dealer ${dealerUpcard.rank} (strong card). You need to improve to compete with dealer's likely strong hand`,
+        expectedValue: 0.1,
+      };
+    } else {
+      return {
+        action: 'hit',
+        confidence: 95,
+        reasoning: `Your ${playerHand.total} is too weak to stand. Take another card to try to reach 17+`,
+        expectedValue: 0.1,
+      };
+    }
   } else {
-    return {
-      action: 'stand',
-      confidence: 95,
-      reasoning: 'Basic strategy recommends standing with this hard total',
-      expectedValue: 0.1,
-    };
+    const dealerIsWeak = ['4', '5', '6'].includes(dealerUpcard.rank);
+    
+    if (playerHand.total >= 17) {
+      return {
+        action: 'stand',
+        confidence: 95,
+        reasoning: `${playerHand.total} is a strong total. Risk of busting is too high to hit - let the dealer play their hand`,
+        expectedValue: 0.1,
+      };
+    } else if (dealerIsWeak) {
+      return {
+        action: 'stand',
+        confidence: 95,
+        reasoning: `Dealer shows ${dealerUpcard.rank} (weak card). Dealer must hit and is likely to bust, so stand and let them play`,
+        expectedValue: 0.1,
+      };
+    } else {
+      return {
+        action: 'stand',
+        confidence: 95,
+        reasoning: `${playerHand.total} vs dealer ${dealerUpcard.rank}. Standing gives you the best chance to win without risking a bust`,
+        expectedValue: 0.1,
+      };
+    }
   }
 }
 
@@ -199,10 +237,21 @@ export function getDoubleDownRecommendation(
   // Check hard totals
   for (const [total, ...dealerValues] of hardDoubleDowns) {
     if (playerTotal === total && dealerValues.includes(dealerValue)) {
+      const dealerIsWeak = ['4', '5', '6'].includes(dealerUpcard.rank);
+      let reasoning = '';
+      
+      if (total === 11) {
+        reasoning = `${total} is the best doubling hand. Dealer shows ${dealerUpcard.rank} - double your bet to maximize profit when you're favored`;
+      } else if (total === 10) {
+        reasoning = `${total} vs dealer ${dealerUpcard.rank} is a strong position. Many cards improve your hand - double to maximize profit`;
+      } else {
+        reasoning = `${total} vs weak dealer ${dealerUpcard.rank}. Dealer is likely to bust - double your bet to capitalize on their weakness`;
+      }
+      
       return {
         action: 'double-down',
         confidence: 90,
-        reasoning: `Basic strategy recommends doubling down on ${playerTotal} vs dealer ${dealerUpcard.rank}`,
+        reasoning,
         expectedValue: 0.2,
       };
     }
@@ -214,7 +263,7 @@ export function getDoubleDownRecommendation(
       return {
         action: 'double-down',
         confidence: 85,
-        reasoning: `Basic strategy recommends doubling down on soft ${playerTotal} vs dealer ${dealerUpcard.rank}`,
+        reasoning: `Soft ${total} vs dealer ${dealerUpcard.rank}. You can't bust with one card - double to maximize profit against the dealer's weak position`,
         expectedValue: 0.15,
       };
     }
@@ -230,7 +279,7 @@ export function getInsuranceRecommendation(): StrategyRecommendation {
   return {
     action: 'insurance',
     confidence: 0,
-    reasoning: 'Basic strategy recommends never taking insurance',
+    reasoning: 'Insurance is a bad bet. The house edge is too high - you lose money over time even when dealer has blackjack occasionally',
     expectedValue: -0.1,
   };
 }
@@ -260,7 +309,7 @@ export function getSurrenderRecommendation(
       return {
         action: 'surrender',
         confidence: 80,
-        reasoning: `Basic strategy recommends surrendering ${playerTotal} vs dealer ${dealerUpcard.rank}`,
+        reasoning: `${total} vs dealer ${dealerUpcard.rank} is a very weak position. Surrendering saves half your bet compared to the likely loss if you play`,
         expectedValue: -0.5,
       };
     }
