@@ -1,18 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Card, Hand, Suit, Rank } from '../../types/card';
-import { getBasicStrategyRecommendation } from '../../utils/strategy';
+import { useState, useEffect, useMemo } from 'react';
+import { Card, Hand } from '../../types/card';
+import { generateAllScenarios, getRandomScenario, DrillScenario } from '../../utils/scenarioGenerator';
 import { Button } from '../ui/Button';
 import './DrillsMode.css';
 
 interface DrillsModeProps {
   onExitDrills: () => void;
-}
-
-interface DrillScenario {
-  playerHand: Hand;
-  dealerUpcard: Card;
-  correctAction: string;
-  explanation: string;
 }
 
 export function DrillsMode({ onExitDrills }: DrillsModeProps) {
@@ -22,89 +15,14 @@ export function DrillsMode({ onExitDrills }: DrillsModeProps) {
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [streak, setStreak] = useState(0);
 
-  // Generate a random scenario
-  const generateScenario = (): DrillScenario => {
-    // For now, let's create some basic scenarios
-    // We'll expand this to be more comprehensive
-    const scenarios = [
-      {
-        playerHand: { 
-          cards: [
-            { rank: 'A' as Rank, suit: 'hearts' as Suit, value: 11, displayValue: 'A' }, 
-            { rank: '7' as Rank, suit: 'spades' as Suit, value: 7, displayValue: '7' }
-          ], 
-          total: 18, 
-          isSoft: true, 
-          isBlackjack: false, 
-          isBusted: false 
-        },
-        dealerUpcard: { rank: '6' as Rank, suit: 'diamonds' as Suit, value: 6, displayValue: '6' },
-      },
-      {
-        playerHand: { 
-          cards: [
-            { rank: '10' as Rank, suit: 'hearts' as Suit, value: 10, displayValue: '10' }, 
-            { rank: '6' as Rank, suit: 'spades' as Suit, value: 6, displayValue: '6' }
-          ], 
-          total: 16, 
-          isSoft: false, 
-          isBlackjack: false, 
-          isBusted: false 
-        },
-        dealerUpcard: { rank: '10' as Rank, suit: 'diamonds' as Suit, value: 10, displayValue: '10' },
-      },
-      {
-        playerHand: { 
-          cards: [
-            { rank: '8' as Rank, suit: 'hearts' as Suit, value: 8, displayValue: '8' }, 
-            { rank: '8' as Rank, suit: 'spades' as Suit, value: 8, displayValue: '8' }
-          ], 
-          total: 16, 
-          isSoft: false, 
-          isBlackjack: false, 
-          isBusted: false 
-        },
-        dealerUpcard: { rank: '9' as Rank, suit: 'diamonds' as Suit, value: 9, displayValue: '9' },
-      },
-      {
-        playerHand: { 
-          cards: [
-            { rank: 'A' as Rank, suit: 'hearts' as Suit, value: 11, displayValue: 'A' }, 
-            { rank: '2' as Rank, suit: 'spades' as Suit, value: 2, displayValue: '2' }
-          ], 
-          total: 13, 
-          isSoft: true, 
-          isBlackjack: false, 
-          isBusted: false 
-        },
-        dealerUpcard: { rank: '5' as Rank, suit: 'diamonds' as Suit, value: 5, displayValue: '5' },
-      },
-      {
-        playerHand: { 
-          cards: [
-            { rank: '9' as Rank, suit: 'hearts' as Suit, value: 9, displayValue: '9' }, 
-            { rank: '2' as Rank, suit: 'spades' as Suit, value: 2, displayValue: '2' }
-          ], 
-          total: 11, 
-          isSoft: false, 
-          isBlackjack: false, 
-          isBusted: false 
-        },
-        dealerUpcard: { rank: '6' as Rank, suit: 'diamonds' as Suit, value: 6, displayValue: '6' },
-      },
-    ];
+  // Generate all possible scenarios once when component mounts
+  const allScenarios = useMemo(() => {
+    return generateAllScenarios();
+  }, []);
 
-    const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-    
-    // Get the correct strategy recommendation
-    const recommendation = getBasicStrategyRecommendation(randomScenario.playerHand, randomScenario.dealerUpcard);
-    
-    return {
-      playerHand: randomScenario.playerHand,
-      dealerUpcard: randomScenario.dealerUpcard,
-      correctAction: recommendation.action,
-      explanation: recommendation.reasoning,
-    };
+  // Generate a random scenario from our comprehensive list
+  const generateScenario = (): DrillScenario => {
+    return getRandomScenario(allScenarios);
   };
 
   // Start a new scenario
@@ -156,6 +74,11 @@ export function DrillsMode({ onExitDrills }: DrillsModeProps) {
     <div className="drills-mode">
       <div className="drills-header">
         <h2>🎯 Drills Mode</h2>
+        <div className="drills-info">
+          <div className="scenario-count">
+            {allScenarios.length} unique scenarios available
+          </div>
+        </div>
         <div className="drills-stats">
           <div className="drills-score">
             Score: {score.correct}/{score.total} ({score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0}%)
@@ -193,6 +116,12 @@ export function DrillsMode({ onExitDrills }: DrillsModeProps) {
         </div>
 
         <div className="scenario-question">
+          <div className="scenario-category">
+            {currentScenario.category === 'hard-total' && '🔢 Hard Total'}
+            {currentScenario.category === 'soft-total' && '🃏 Soft Total'}
+            {currentScenario.category === 'pair' && '👥 Pair'}
+            {currentScenario.category === 'blackjack' && '🎯 Blackjack'}
+          </div>
           <h3>What's the correct play?</h3>
         </div>
 
