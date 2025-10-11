@@ -412,7 +412,7 @@ function App() {
             <li><strong>Double down on 10 vs dealer 2-9</strong> - Strong double down opportunity</li>
             <li><strong>Double down on 9 vs dealer 3-6</strong> - Good double down spot</li>
             <li><strong>Never take insurance</strong> - The house edge is too high</li>
-            <li><strong>Surrender 16 vs dealer 9, 10, or Ace</strong> - Cut your losses</li>
+            <li><strong>Surrender 16 vs dealer 9 or 10</strong> - Cut your losses on weak hands</li>
             <li><strong>Surrender 15 vs dealer 10</strong> - Another good surrender spot</li>
             <li><strong>Hit soft 17 and below</strong> - You can't bust with a soft hand</li>
             <li><strong>Stand on hard 17 and above</strong> - High risk of busting</li>
@@ -422,20 +422,23 @@ function App() {
           <p>For hard totals (no Ace or Ace counted as 1):</p>
           <ul>
             <li>5-8: Always hit</li>
-            <li>9: Hit vs 2-6, double vs 3-6</li>
-            <li>10: Hit vs 2-9, double vs 2-9</li>
-            <li>11: Hit vs 2-10, double vs 2-10</li>
-            <li>12: Stand vs 4-6, hit vs 2-3, 7-10</li>
-            <li>13-16: Stand vs 2-6, hit vs 7-10</li>
+            <li>9: Double vs dealer 3-6, otherwise hit</li>
+            <li>10: Double vs dealer 2-9, hit vs dealer 10 or A</li>
+            <li>11: Double vs dealer 2-10, hit vs dealer A</li>
+            <li>12: Stand vs dealer 4-6, hit vs dealer 2-3, 7-A</li>
+            <li>13-16: Stand vs dealer 2-6, hit vs dealer 7-A</li>
             <li>17-21: Always stand</li>
           </ul>
           
           <h3>Soft Totals Strategy</h3>
           <p>For soft totals (Ace counted as 11):</p>
           <ul>
-            <li>A,2-A,6: Hit vs 2-6, double vs 5-6</li>
-            <li>A,7: Stand vs 2-6, hit vs 7-8, double vs 2-6</li>
-            <li>A,8-A,9: Always stand</li>
+            <li>A,2 or A,3 (13-14): Double vs dealer 5-6, otherwise hit</li>
+            <li>A,4 or A,5 (15-16): Double vs dealer 4-6, otherwise hit</li>
+            <li>A,6 (17): Double vs dealer 3-6, otherwise hit</li>
+            <li>A,7 (18): Double vs dealer 2-6, stand vs dealer 7-8, hit vs dealer 9-A</li>
+            <li>A,8 or A,9 (19-20): Always stand</li>
+            <li>A,10 (21): Blackjack! Automatic win (pays 3:2)</li>
           </ul>
         </div>
       </Modal>

@@ -24,17 +24,18 @@ const HARD_TOTALS_STRATEGY: (PlayerAction | 'H' | 'S')[][] = [
 ];
 
 // Soft totals strategy table [playerTotal][dealerUpcard]
+// Note: Doubling is checked separately in getDoubleDownRecommendation
 const SOFT_TOTALS_STRATEGY: (PlayerAction | 'H' | 'S')[][] = [
   // Dealer upcard: A, 2, 3, 4, 5, 6, 7, 8, 9, 10
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,2
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,3
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,4
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,5
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,6
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,7
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,8
-  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,9
-  ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // A,10
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,2 (13)
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,3 (14)
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,4 (15)
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,5 (16)
+  ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'], // A,6 (17)
+  ['H', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'H', 'H'], // A,7 (18) - Stand vs 2-8, Hit vs 9,10,A
+  ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // A,8 (19)
+  ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // A,9 (20)
+  ['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'], // A,10 (21 - Blackjack)
 ];
 
 // Pairs strategy table [playerPair][dealerUpcard]

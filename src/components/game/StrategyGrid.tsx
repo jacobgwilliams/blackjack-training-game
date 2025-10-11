@@ -13,23 +13,31 @@ export function StrategyGrid({ isOpen, onClose }: StrategyGridProps) {
   const playerTotals = Array.from({ length: 16 }, (_, i) => i + 5); // 5-20
 
   const getRecommendedAction = (playerTotal: number, dealerUpcard: string): string => {
-    // Hard totals
+    // Hard totals strategy (matching strategy.ts logic)
     if (playerTotal <= 8) return 'H'; // Always hit
     if (playerTotal >= 17) return 'S'; // Always stand
 
-    // Specific recommendations
+    // 9: Double vs 3-6, otherwise hit
     if (playerTotal === 9) {
       return ['3', '4', '5', '6'].includes(dealerUpcard) ? 'D' : 'H';
     }
+    
+    // 10: Double vs 2-9, hit vs 10 or A
     if (playerTotal === 10) {
-      return dealerUpcard === 'A' || dealerUpcard === '10' ? 'H' : 'D';
+      return ['A', '10'].includes(dealerUpcard) ? 'H' : 'D';
     }
+    
+    // 11: Double vs 2-10, hit vs A
     if (playerTotal === 11) {
       return dealerUpcard === 'A' ? 'H' : 'D';
     }
+    
+    // 12: Stand vs 4-6, hit otherwise
     if (playerTotal === 12) {
       return ['4', '5', '6'].includes(dealerUpcard) ? 'S' : 'H';
     }
+    
+    // 13-16: Stand vs 2-6, hit vs 7-A
     if (playerTotal >= 13 && playerTotal <= 16) {
       return ['2', '3', '4', '5', '6'].includes(dealerUpcard) ? 'S' : 'H';
     }
