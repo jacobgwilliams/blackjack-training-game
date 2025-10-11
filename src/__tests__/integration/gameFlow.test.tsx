@@ -202,7 +202,7 @@ describe('Game Flow Integration Tests', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       });
     });
 
@@ -375,7 +375,7 @@ describe('Game Flow Integration Tests', () => {
       
       // Wait for game to complete
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Get the result (look for specific game result messages, not header text)
@@ -426,7 +426,7 @@ describe('Game Flow Integration Tests', () => {
       
       // Wait for game to complete
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Capture balance after first hand
@@ -479,7 +479,7 @@ describe('Game Flow Integration Tests', () => {
       
       // Wait for game to complete
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Click Reset Game button in header
@@ -526,7 +526,7 @@ describe('Game Flow Integration Tests', () => {
       });
       
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Get balance after first round
@@ -583,7 +583,7 @@ describe('Game Flow Integration Tests', () => {
       });
       
       await waitFor(() => {
-        expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Both Hands|Split:/)).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Open statistics modal

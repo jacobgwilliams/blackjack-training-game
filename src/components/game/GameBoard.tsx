@@ -33,6 +33,24 @@ export function GameBoard({
   const getGameResultMessage = () => {
     if (!gameState.result) return '';
     
+    // For split hands, show a summary of both hands
+    if (gameState.isSplit && gameState.splitHands.length > 0) {
+      const wins = gameState.splitHands.filter(h => h.result === 'player-wins' || h.result === 'player-blackjack').length;
+      const losses = gameState.splitHands.filter(h => h.result === 'dealer-wins' || h.result === 'dealer-blackjack').length;
+      const pushes = gameState.splitHands.filter(h => h.result === 'push').length;
+      
+      if (wins === 2) return 'Both Hands Win! 🎉';
+      if (losses === 2) return 'Both Hands Lose';
+      if (pushes === 2) return 'Both Hands Push';
+      if (wins === 1 && losses === 1) return 'Split: 1 Win, 1 Loss';
+      if (wins === 1 && pushes === 1) return 'Split: 1 Win, 1 Push';
+      if (losses === 1 && pushes === 1) return 'Split: 1 Loss, 1 Push';
+      
+      // Fallback to showing count
+      return `Split Result: ${wins}W ${losses}L ${pushes}P`;
+    }
+    
+    // Standard single-hand results
     switch (gameState.result) {
       case 'player-wins':
         return 'You Win!';
@@ -50,6 +68,19 @@ export function GameBoard({
   };
   
   const getResultColor = () => {
+    // For split hands, determine color based on overall outcome
+    if (gameState.isSplit && gameState.splitHands.length > 0) {
+      const wins = gameState.splitHands.filter(h => h.result === 'player-wins' || h.result === 'player-blackjack').length;
+      const losses = gameState.splitHands.filter(h => h.result === 'dealer-wins' || h.result === 'dealer-blackjack').length;
+      
+      if (wins === 2) return 'success'; // Both win
+      if (losses === 2) return 'danger'; // Both lose
+      if (wins > losses) return 'success'; // More wins than losses
+      if (losses > wins) return 'danger'; // More losses than wins
+      return 'secondary'; // Mixed or all pushes
+    }
+    
+    // Standard single-hand result colors
     switch (gameState.result) {
       case 'player-wins':
       case 'player-blackjack':
