@@ -54,17 +54,24 @@ function App() {
     }
   }, [gameState.phase, gameState.result]);
   
+  // Automatically play dealer hand when phase changes to dealer-turn
+  useEffect(() => {
+    if (gameState.phase === 'dealer-turn') {
+      // Small delay for animation/visual feedback
+      const timer = setTimeout(() => {
+        actions.dealerPlay();
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [gameState.phase]);
+  
   const handlePlayerAction = async (action: string) => {
     try {
       console.log('Player action:', action, 'Current game state:', gameState);
       actions.playerAction(action as PlayerAction);
       
-      // If player stands, automatically play dealer hand with animation
-      if (action === 'stand') {
-        // Wait for state update
-        await new Promise(resolve => setTimeout(resolve, 500));
-        actions.dealerPlay();
-      }
+      // Note: Dealer play is now handled by useEffect watching for phase change
     } catch (error) {
       console.error('Error in player action:', error);
       // Reset to betting phase on error
