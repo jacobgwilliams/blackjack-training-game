@@ -1,4 +1,3 @@
-import React from 'react';
 import './Footer.css';
 
 interface FooterProps {
@@ -15,6 +14,23 @@ export function Footer({ className = '', onShowRules, onShowStrategy, onShowHelp
         <div className="footer-left">
           <p className="footer-text">
             © 2025 Jacob Williams. Built for educational purposes.
+          </p>
+          <p className="footer-text footer-responsible-gaming">
+            <a 
+              href="https://www.ncpgambling.org/help-treatment/help-by-state/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-help-link"
+            >
+              🎗️ Problem Gambling Resources
+            </a>
+            {' '}&bull;{' '}
+            <a 
+              href="tel:1-800-522-4700"
+              className="footer-help-link"
+            >
+              1-800-522-4700
+            </a>
           </p>
         </div>
         
