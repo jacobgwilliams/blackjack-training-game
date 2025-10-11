@@ -1,6 +1,5 @@
 import { useState, useCallback, useReducer, useEffect } from 'react';
 import { GameState, GameSettings, PlayerAction, PlayerStatistics } from '../types/game';
-import { Card } from '../types/card';
 import { createShoe, shuffleDeck } from '../utils/cardUtils';
 import { 
   initializeGame, 

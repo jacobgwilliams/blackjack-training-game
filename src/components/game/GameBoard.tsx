@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { GameState, PlayerAction, DebugScenario } from '../../types/game';
 import { Hand } from './Hand';
 import { Button } from '../ui/Button';
@@ -9,7 +9,6 @@ import './GameBoard.css';
 interface GameBoardProps {
   gameState: GameState;
   onPlayerAction: (action: PlayerAction) => void;
-  onDealerPlay: () => void;
   onDeal: () => void;
   showStrategyHints?: boolean;
   trainingScenario?: DebugScenario;
@@ -18,7 +17,6 @@ interface GameBoardProps {
 export function GameBoard({
   gameState,
   onPlayerAction,
-  onDealerPlay,
   onDeal,
   showStrategyHints = true,
   trainingScenario = 'none',

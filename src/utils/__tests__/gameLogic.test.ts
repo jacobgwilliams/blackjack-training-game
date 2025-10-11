@@ -107,8 +107,8 @@ describe('gameLogic', () => {
           playerHand: {
             ...gameState.playerHand,
             cards: [
-              { suit: 'hearts', rank: 'K', value: 10, displayValue: 'K' },
-              { suit: 'spades', rank: 'K', value: 10, displayValue: 'K' }
+              { suit: 'hearts' as const, rank: 'K' as const, value: 10, displayValue: 'K' },
+              { suit: 'spades' as const, rank: 'K' as const, value: 10, displayValue: 'K' }
             ],
             total: 20
           }

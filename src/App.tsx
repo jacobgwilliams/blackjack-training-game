@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
@@ -34,7 +34,7 @@ function App() {
     },
   }), [debugScenario, shoeSize]);
   
-  const { gameState, settings, statistics, actions } = useGameState(gameSettings);
+  const { gameState, statistics, actions } = useGameState(gameSettings);
   const lastProcessedResult = useRef<string | null>(null);
   
   // Initialize game on mount
@@ -199,7 +199,6 @@ function App() {
           <GameBoard
             gameState={gameState}
             onPlayerAction={handlePlayerAction}
-            onDealerPlay={handleDealerPlay}
             onDeal={handleDeal}
             showStrategyHints={showStrategyHints}
             trainingScenario={debugScenario}

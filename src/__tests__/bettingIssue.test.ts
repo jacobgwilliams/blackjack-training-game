@@ -81,7 +81,7 @@ describe('Betting Issue Debug', () => {
 
   it('should validate bet amounts correctly', () => {
     const deck = shuffleDeck(createShoe(6));
-    const gameState = initializeGame(deck, 100); // Low balance
+    const gameState = initializeGame(deck, 100, 6); // Low balance
     
     // Should allow bet within balance
     const validBet = placeBet(gameState, 50);

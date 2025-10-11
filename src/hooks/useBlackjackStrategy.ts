@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { Hand, Card } from '../types/card';
-import { StrategyRecommendation, DebugScenario } from '../types/game';
+import { DebugScenario } from '../types/game';
 import { 
-  getBasicStrategyRecommendation, 
   getDoubleDownRecommendation, 
   getSurrenderRecommendation, 
   getInsuranceRecommendation,
@@ -15,7 +14,7 @@ export function useBlackjackStrategy(playerHand: Hand, dealerUpcard: Card | null
       return [];
     }
     
-    return getAllStrategyRecommendations(playerHand, dealerUpcard);
+    return getAllStrategyRecommendations(playerHand, dealerUpcard as Card);
   }, [playerHand, dealerUpcard]);
   
   const primaryRecommendation = useMemo(() => {
@@ -40,7 +39,7 @@ export function useBlackjackStrategy(playerHand: Hand, dealerUpcard: Card | null
       
       if (expectedAction && bestRec.action !== expectedAction) {
         // Add training context explaining why NOT to do the training action
-        const trainingContext = getTrainingContext(trainingScenario, bestRec.action, playerHand, dealerUpcard);
+        const trainingContext = getTrainingContext(trainingScenario, bestRec.action, playerHand, dealerUpcard as Card);
         return {
           ...bestRec,
           reasoning: `${bestRec.reasoning}\n\n🎓 Training Note: ${trainingContext}`,
@@ -53,12 +52,12 @@ export function useBlackjackStrategy(playerHand: Hand, dealerUpcard: Card | null
   
   const doubleDownRecommendation = useMemo(() => {
     if (!dealerUpcard) return null;
-    return getDoubleDownRecommendation(playerHand, dealerUpcard);
+    return getDoubleDownRecommendation(playerHand, dealerUpcard as Card);
   }, [playerHand, dealerUpcard]);
   
   const surrenderRecommendation = useMemo(() => {
     if (!dealerUpcard) return null;
-    return getSurrenderRecommendation(playerHand, dealerUpcard);
+    return getSurrenderRecommendation(playerHand, dealerUpcard as Card);
   }, [playerHand, dealerUpcard]);
   
   const insuranceRecommendation = useMemo(() => {

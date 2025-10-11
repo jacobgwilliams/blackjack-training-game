@@ -1,4 +1,4 @@
-import { Card, Hand, Deck } from './card';
+import { Hand, Deck } from './card';
 
 export type GamePhase = 
   | 'waiting' 

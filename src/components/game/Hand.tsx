@@ -1,4 +1,3 @@
-import React from 'react';
 import { Hand as HandType } from '../../types/card';
 import { Card } from './Card';
 import './Hand.css';

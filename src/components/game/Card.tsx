@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card as CardType } from '../../types/card';
 import { getSuitSymbol, getSuitColor } from '../../utils/cardUtils';
 import './Card.css';
