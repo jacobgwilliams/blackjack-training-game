@@ -1,17 +1,18 @@
 import { GameState, GameResult, PlayerAction, GamePhase } from '../types/game';
 import { Hand, Card } from '../types/card';
 import { dealCard, addCardToHand, createEmptyHand, canSplitHand, canDoubleDown, canSurrender } from './cardUtils';
+import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
 
 /**
  * Initializes a new game state
  */
-export function initializeGame(deck: Card[], startingBalance: number): GameState {
+export function initializeGame(deck: Card[], startingBalance: number, preserveBalance?: boolean): GameState {
   return {
     phase: 'betting',
     deck,
     playerHand: createEmptyHand(),
     dealerHand: createEmptyHand(),
-    playerScore: startingBalance,
+    playerScore: preserveBalance === false ? DEFAULT_GAME_SETTINGS.startingBalance : startingBalance,
     currentBet: 0,
     canDoubleDown: false,
     canSplit: false,
@@ -26,12 +27,12 @@ export function initializeGame(deck: Card[], startingBalance: number): GameState
  * Places a bet and starts the game
  */
 export function placeBet(gameState: GameState, betAmount: number): GameState {
-  if (gameState.phase !== 'betting') {
-    throw new Error('Can only place bets during betting phase');
-  }
-  
   if (betAmount > gameState.playerScore) {
     throw new Error('Insufficient funds');
+  }
+  
+  if (gameState.phase !== 'betting') {
+    throw new Error('Can only place bets during betting phase');
   }
   
   return {

@@ -13,7 +13,7 @@ import {
 import { DEFAULT_GAME_SETTINGS } from '../constants/gameRules';
 
 type GameStateAction = 
-  | { type: 'INITIALIZE_GAME'; payload: { settings: GameSettings } }
+  | { type: 'INITIALIZE_GAME'; payload: { settings: GameSettings; preserveBalance?: boolean } }
   | { type: 'PLACE_BET'; payload: { betAmount: number } }
   | { type: 'DEAL_INITIAL_CARDS' }
   | { type: 'EXECUTE_PLAYER_ACTION'; payload: { action: PlayerAction } }
@@ -24,9 +24,9 @@ type GameStateAction =
 function gameStateReducer(state: GameState, action: GameStateAction): GameState {
   switch (action.type) {
     case 'INITIALIZE_GAME': {
-      const { settings } = action.payload;
+      const { settings, preserveBalance } = action.payload;
       const deck = shuffleDeck(createShoe(settings.deckCount));
-      return initializeGame(deck, settings.startingBalance);
+      return initializeGame(deck, state.playerScore, preserveBalance);
     }
     
     case 'PLACE_BET': {
@@ -86,8 +86,8 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
     isGameActive: false,
   });
   
-  const initializeNewGame = useCallback(() => {
-    dispatch({ type: 'INITIALIZE_GAME', payload: { settings } });
+  const initializeNewGame = useCallback((preserveBalance: boolean = true) => {
+    dispatch({ type: 'INITIALIZE_GAME', payload: { settings, preserveBalance } });
   }, [settings]);
   
   const makeBet = useCallback((betAmount: number) => {
@@ -108,7 +108,7 @@ export function useGameState(initialSettings: GameSettings = DEFAULT_GAME_SETTIN
   
   const newGame = useCallback(() => {
     // Reset game and reinitialize with starting balance
-    dispatch({ type: 'INITIALIZE_GAME', payload: { settings } });
+    dispatch({ type: 'INITIALIZE_GAME', payload: { settings, preserveBalance: false } });
   }, [settings]);
   
   const updateSettings = useCallback((newSettings: Partial<GameSettings>) => {

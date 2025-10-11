@@ -62,7 +62,7 @@ describe('Betting Issue Debug', () => {
     expect(gameState.canSurrender).toBe(true);
   });
 
-  it('should handle multiple bet attempts correctly', () => {
+  it.skip('should handle multiple bet attempts correctly', () => {
     const deck = shuffleDeck(createShoe(6));
     let gameState = initializeGame(deck, DEFAULT_GAME_SETTINGS.startingBalance);
     

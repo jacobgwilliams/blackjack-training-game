@@ -57,8 +57,14 @@ export function StrategyGrid({ isOpen, onClose }: StrategyGridProps) {
     }
   };
 
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="strategy-grid-overlay">
+    <div className="strategy-grid-overlay" onClick={handleOverlayClick}>
       <div className="strategy-grid">
         <div className="strategy-grid-header">
           <h2>Basic Strategy Grid</h2>

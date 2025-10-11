@@ -317,7 +317,7 @@ function App() {
       <Modal
         isOpen={showHelp}
         onClose={() => setShowHelp(false)}
-        title="Help & Support"
+        title="Help"
       >
         <div className="help-content">
           <h3>How to Play</h3>

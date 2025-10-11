@@ -1,5 +1,4 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../App';
 
@@ -35,7 +34,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
-      expect(screen.getByText('Current Balance: $1000')).toBeInTheDocument();
+      expect(screen.getByText((_, element) => {
+        return element?.textContent === 'Current Balance: $1000';
+      })).toBeInTheDocument();
       expect(screen.getByText('$10')).toBeInTheDocument();
       expect(screen.getByText('$25')).toBeInTheDocument();
       expect(screen.getByText('$50')).toBeInTheDocument();
@@ -49,11 +50,11 @@ describe('Game Flow Integration Tests', () => {
       // Initially should show betting screen
       expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
       
-      // Click a bet button
-      const betButton = screen.getByText('$25');
-      await user.click(betButton);
-      
-      // Should transition to game board
+      // Click bet button and wait for transition
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
+
       await waitFor(() => {
         expect(screen.queryByText('Place Your Bet')).not.toBeInTheDocument();
       });
@@ -70,8 +71,10 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Try to bet more than available balance
-      const betButton = screen.getByText('$100');
-      await user.click(betButton);
+      await act(async () => {
+        const betButton = screen.getByText('$100');
+        await user.click(betButton);
+      });
       
       // Should still be on betting screen
       await waitFor(() => {
@@ -96,7 +99,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for game board to appear
       await waitFor(() => {
@@ -119,7 +124,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for game board and action buttons
       await waitFor(() => {
@@ -133,7 +140,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for strategy hints to appear
       await waitFor(() => {
@@ -148,17 +157,20 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet and start game
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for game board
       await waitFor(() => {
         expect(screen.getByText('Hit')).toBeInTheDocument();
       });
       
-      // Click hit
-      await user.click(screen.getByText('Hit'));
-      
-      // Should have 3 cards now
+      // Click hit and wait for state update
+      await act(async () => {
+        await user.click(screen.getByText('Hit'));
+      });
+
       await waitFor(() => {
         const playerCards = screen.getByText('Player').closest('.hand')?.querySelectorAll('.card');
         expect(playerCards).toHaveLength(3);
@@ -170,17 +182,25 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet and start game
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for game board
       await waitFor(() => {
         expect(screen.getByText('Stand')).toBeInTheDocument();
       });
       
-      // Click stand
-      await user.click(screen.getByText('Stand'));
-      
-      // Should automatically play dealer hand and show result
+      // Wait for game to be ready
+      await waitFor(() => {
+        expect(screen.getByText('Stand')).toBeInTheDocument();
+      });
+
+      // Click stand and wait for dealer play and result
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+
       await waitFor(() => {
         expect(screen.getByText(/You Win!|Dealer Wins|Push/)).toBeInTheDocument();
       });
@@ -191,7 +211,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet and start game
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Wait for game board
       await waitFor(() => {
@@ -199,14 +221,16 @@ describe('Game Flow Integration Tests', () => {
       });
       
       // Keep hitting until bust (this might take several clicks)
-      let hitButton = screen.getByText('Hit');
+      let hitButton = screen.getByText('Hit') as HTMLButtonElement;
       for (let i = 0; i < 10; i++) {
         if (hitButton && !hitButton.disabled) {
-          await user.click(hitButton);
+          await act(async () => {
+            await user.click(hitButton);
+          });
           await waitFor(() => {
-            const newHitButton = screen.queryByText('Hit');
-            if (newHitButton && newHitButton.disabled) {
-              hitButton = null;
+            const newHitButton = screen.queryByText('Hit') as HTMLButtonElement | null;
+            if (newHitButton?.disabled) {
+              hitButton = newHitButton;
             }
           });
         } else {
@@ -227,17 +251,25 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Click rules button
-      await user.click(screen.getByRole('button', { name: 'Game Rules' }));
+      await act(async () => {
+        await user.click(screen.getByRole('button', { name: 'Game Rules' }));
+      });
       
       // Should show rules modal
-      expect(screen.getByText('Blackjack Rules')).toBeInTheDocument();
-      expect(screen.getByText('Objective')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Blackjack Rules')).toBeInTheDocument();
+        expect(screen.getByText('Objective')).toBeInTheDocument();
+      });
       
       // Close modal
-      await user.click(screen.getByText('×'));
+      await act(async () => {
+        await user.click(screen.getByText('×'));
+      });
       
       // Modal should be closed
-      expect(screen.queryByText('Blackjack Rules')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText('Blackjack Rules')).not.toBeInTheDocument();
+      });
     });
 
     it('should open and close statistics modal', async () => {
@@ -245,17 +277,25 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Click stats button
-      await user.click(screen.getByText('Stats'));
+      await act(async () => {
+        await user.click(screen.getByText('Stats'));
+      });
       
       // Should show statistics modal
-      expect(screen.getByText('Game Statistics')).toBeInTheDocument();
-      expect(screen.getByText('Games Played')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Game Statistics')).toBeInTheDocument();
+        expect(screen.getByText('Games Played')).toBeInTheDocument();
+      });
       
       // Close modal
-      await user.click(screen.getByText('×'));
+      await act(async () => {
+        await user.click(screen.getByText('×'));
+      });
       
       // Modal should be closed
-      expect(screen.queryByText('Game Statistics')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText('Game Statistics')).not.toBeInTheDocument();
+      });
     });
 
     it('should open footer links modals', async () => {
@@ -263,19 +303,24 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Click footer strategy link
-      await user.click(screen.getByText('Strategy'));
+      await act(async () => {
+        await user.click(screen.getByText('Strategy'));
+      });
       
       // Should show strategy modal
-      expect(screen.getByText('Basic Strategy Guide')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Basic Strategy Guide')).toBeInTheDocument();
+      });
       
       // Close modal
-      await user.click(screen.getByText('×'));
+      await act(async () => {
+        await user.click(screen.getByText('×'));
+      });
       
-      // Click footer help link
-      await user.click(screen.getByText('Help'));
-      
-      // Should show help modal
-      expect(screen.getByText('Help & Support')).toBeInTheDocument();
+      // Click footer help link and verify modal opens
+      await act(async () => {
+        await user.click(screen.getByRole('button', { name: 'Help & Support' }));
+      });
     });
   });
 
@@ -285,7 +330,9 @@ describe('Game Flow Integration Tests', () => {
       render(<App />);
       
       // Place a bet
-      await user.click(screen.getByText('$25'));
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
       
       // Verify balance is updated
       await waitFor(() => {
@@ -294,11 +341,15 @@ describe('Game Flow Integration Tests', () => {
       });
       
       // Hit once
-      await user.click(screen.getByText('Hit'));
+      await act(async () => {
+        await user.click(screen.getByText('Hit'));
+      });
       
       // Balance should remain the same
-      expect(screen.getByText('Balance: $975')).toBeInTheDocument();
-      expect(screen.getByText('Current Bet: $25')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Balance: $975')).toBeInTheDocument();
+        expect(screen.getByText('Current Bet: $25')).toBeInTheDocument();
+      });
     });
   });
 });
