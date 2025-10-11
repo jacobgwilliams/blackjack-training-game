@@ -352,4 +352,205 @@ describe('Game Flow Integration Tests', () => {
       });
     });
   });
+
+  describe('Balance Management', () => {
+    it('should update balance after winning a hand', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      
+      // Place a bet
+      await act(async () => {
+        await user.click(screen.getByText('$50'));
+      });
+      
+      // Wait for game to start
+      await waitFor(() => {
+        expect(screen.getByText('Balance: $950')).toBeInTheDocument();
+      });
+      
+      // Stand to complete the hand
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+      
+      // Wait for game to complete
+      await waitFor(() => {
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Get the result
+      const hasWin = screen.queryByText(/You Win!|Blackjack!/);
+      const hasPush = screen.queryByText(/Push/);
+      const hasLoss = screen.queryByText(/Dealer Wins|Dealer Blackjack/);
+      
+      // Verify balance was updated based on result
+      if (hasWin) {
+        // Player won - should have at least $950 + bet back
+        await waitFor(() => {
+          const balanceText = screen.getByText(/Balance: \$/);
+          const balanceMatch = balanceText.textContent?.match(/\$(\d+)/);
+          const balance = balanceMatch ? parseInt(balanceMatch[1]) : 0;
+          expect(balance).toBeGreaterThanOrEqual(1000); // Won at least $50
+        });
+      } else if (hasPush) {
+        // Push - should have original balance back
+        await waitFor(() => {
+          expect(screen.getByText('Balance: $1000')).toBeInTheDocument();
+        });
+      } else if (hasLoss) {
+        // Lost - balance stays at $950
+        await waitFor(() => {
+          expect(screen.getByText('Balance: $950')).toBeInTheDocument();
+        });
+      }
+    });
+
+    it('should persist balance when clicking Deal button for next hand', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      
+      // Place first bet
+      await act(async () => {
+        await user.click(screen.getByText('$25'));
+      });
+      
+      // Wait for game to start
+      await waitFor(() => {
+        expect(screen.getByText(/Balance: \$975/)).toBeInTheDocument();
+      });
+      
+      // Stand to complete the hand
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+      
+      // Wait for game to complete
+      await waitFor(() => {
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Capture balance after first hand
+      await waitFor(() => {
+        expect(screen.getByText('Deal')).toBeInTheDocument();
+      });
+      
+      const firstHandBalanceText = screen.getByText(/Balance: \$/);
+      const firstHandBalance = parseInt(firstHandBalanceText.textContent?.match(/\$(\d+)/)?.[1] || '0');
+      
+      // Verify balance is not the starting balance (game was played)
+      expect(firstHandBalance).not.toBe(1000);
+      
+      // Click Deal for next hand
+      await act(async () => {
+        await user.click(screen.getByText('Deal'));
+      });
+      
+      // Should return to betting screen with same balance
+      await waitFor(() => {
+        expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
+        // Balance should still be what it was after the first hand
+        expect(screen.getByText(/Current Balance: \$/)).toBeInTheDocument();
+      });
+      
+      // Verify the balance matches what we had after first hand
+      const secondHandBalanceText = screen.getByText(/Current Balance: \$/);
+      const secondHandBalance = parseInt(secondHandBalanceText.textContent?.match(/\$(\d+)/)?.[1] || '0');
+      expect(secondHandBalance).toBe(firstHandBalance);
+    });
+
+    it('should reset balance to starting amount when clicking Reset Game button', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      
+      // Place a bet
+      await act(async () => {
+        await user.click(screen.getByText('$100'));
+      });
+      
+      // Wait for game to start
+      await waitFor(() => {
+        expect(screen.getByText('Balance: $900')).toBeInTheDocument();
+      });
+      
+      // Stand to complete the hand
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+      
+      // Wait for game to complete
+      await waitFor(() => {
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Click Reset Game button in header
+      await act(async () => {
+        await user.click(screen.getByRole('button', { name: /Reset Game/i }));
+      });
+      
+      // Should return to betting screen with starting balance of $1000
+      await waitFor(() => {
+        expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
+        expect(screen.getByText((_, element) => {
+          return element?.textContent === 'Current Balance: $1000';
+        })).toBeInTheDocument();
+      });
+    });
+
+    it('should handle multiple rounds with balance persistence', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      
+      // First round
+      await act(async () => {
+        await user.click(screen.getByText('$10'));
+      });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Balance: \$990/)).toBeInTheDocument();
+      });
+      
+      await act(async () => {
+        await user.click(screen.getByText('Stand'));
+      });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/You Win!|Dealer Wins|Push|Blackjack/)).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Get balance after first round
+      await waitFor(() => {
+        expect(screen.getByText('Deal')).toBeInTheDocument();
+      });
+      
+      const firstBalanceText = screen.getByText(/Balance: \$/);
+      const firstBalance = parseInt(firstBalanceText.textContent?.match(/\$(\d+)/)?.[1] || '0');
+      
+      // Start second round
+      await act(async () => {
+        await user.click(screen.getByText('Deal'));
+      });
+      
+      await waitFor(() => {
+        expect(screen.getByText('Place Your Bet')).toBeInTheDocument();
+      });
+      
+      // Verify balance persisted from first round
+      const balanceAfterDeal = screen.getByText(/Current Balance: \$/);
+      const balanceAfterDealAmount = parseInt(balanceAfterDeal.textContent?.match(/\$(\d+)/)?.[1] || '0');
+      expect(balanceAfterDealAmount).toBe(firstBalance);
+      
+      // Second round - place another bet
+      await act(async () => {
+        await user.click(screen.getByText('$10'));
+      });
+      
+      await waitFor(() => {
+        const expectedBalance = firstBalance - 10;
+        expect(screen.getByText(/Balance: \$/)).toBeInTheDocument();
+        const currentBalanceText = screen.getByText(/Balance: \$/);
+        const currentBalance = parseInt(currentBalanceText.textContent?.match(/\$(\d+)/)?.[1] || '0');
+        expect(currentBalance).toBe(expectedBalance);
+      });
+    });
+  });
 });

@@ -71,10 +71,19 @@ function App() {
   
   const handleNewGame = () => {
     try {
-      console.log('New game');
-      actions.newGame();
+      console.log('Reset game - resetting balance to starting amount');
+      actions.newGame(); // This resets the balance
     } catch (error) {
       console.error('Error in new game:', error);
+    }
+  };
+  
+  const handleDeal = () => {
+    try {
+      console.log('Deal - starting new hand with current balance');
+      actions.initializeNewGame(); // This preserves the balance
+    } catch (error) {
+      console.error('Error in deal:', error);
     }
   };
   
@@ -148,7 +157,7 @@ function App() {
             gameState={gameState}
             onPlayerAction={handlePlayerAction}
             onDealerPlay={handleDealerPlay}
-            onDeal={handleNewGame}
+            onDeal={handleDeal}
             showStrategyHints={showStrategyHints}
           />
         )}
