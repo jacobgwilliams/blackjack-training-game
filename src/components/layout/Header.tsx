@@ -1,5 +1,6 @@
 import { Button } from '../ui/Button';
 import { Dropdown } from '../ui/Dropdown';
+import { HamburgerMenu } from '../ui/HamburgerMenu';
 import './Header.css';
 
 interface HeaderProps {
@@ -47,6 +48,16 @@ export function Header({
         
         <div className="header-right">
           <nav className="header-nav">
+            <HamburgerMenu
+              onResetGame={onResetGame}
+              onToggleStrategyGrid={onToggleStrategyGrid}
+              onToggleStrategyHints={onToggleStrategyHints}
+              onShowStatistics={onShowStatistics}
+              onShowSettings={onShowSettings}
+              showStrategyHints={showStrategyHints}
+              isDrillsMode={isDrillsMode}
+            />
+            
             {onToggleDrillsMode && (
               <Dropdown
                 options={[

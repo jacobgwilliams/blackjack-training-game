@@ -59,6 +59,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
+  align-items: start;
 }
 
 .player-cards,
@@ -79,6 +80,7 @@
   justify-content: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .drills-mode .card {
@@ -210,6 +212,18 @@
   .scenario-cards {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+  
+  .player-cards,
+  .dealer-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cards-display {
+    flex-direction: row;
+    gap: 0.5rem;
   }
   
   .drills-stats {
