@@ -80,19 +80,32 @@ export function StrategyGrid({ isOpen, onClose }: StrategyGridProps) {
         </div>
         
         <div className="strategy-grid-content">
+          <div className="strategy-grid-instructions">
+            <h3>How to Use This Chart</h3>
+            <p>
+              Find your hand total in the <strong>left column</strong> (Player), then look across to find the column 
+              matching the <strong>dealer's face-up card</strong>. The colored cell shows the optimal action:
+            </p>
+          </div>
+          
           <div className="strategy-grid-legend">
             <div className="legend-item">
               <span className="legend-color" style={{ backgroundColor: getActionColor('H') }}></span>
-              <span>Hit</span>
+              <span>Hit - Take another card</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ backgroundColor: getActionColor('S') }}></span>
-              <span>Stand</span>
+              <span>Stand - Keep your current hand</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ backgroundColor: getActionColor('D') }}></span>
-              <span>Double</span>
+              <span>Double - Double your bet, take one card, then stand</span>
             </div>
+          </div>
+          
+          <div className="strategy-grid-note">
+            <strong>Note:</strong> This chart shows hard totals only. For soft hands (with an Ace counting as 11) 
+            and pairs, check the Basic Strategy Guide for complete recommendations.
           </div>
 
           <table className="strategy-table">
