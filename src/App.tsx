@@ -235,6 +235,17 @@ function App() {
             <li><strong>Insurance:</strong> A side bet offered when the dealer shows an Ace. You bet half your original bet that the dealer has blackjack. If the dealer has blackjack, insurance pays 2:1, but you lose your original bet. If not, you lose the insurance bet but continue with your original hand. Generally not recommended due to high house edge.</li>
           </ul>
           
+          <h3>Casino Hand Signals</h3>
+          <p>At a real casino table, you use hand gestures to communicate your decisions:</p>
+          <ul>
+            <li><strong>Hit:</strong> Tap the table with your finger or wave your hand toward yourself</li>
+            <li><strong>Stand:</strong> Wave your hand horizontally over your cards (palm down)</li>
+            <li><strong>Double Down:</strong> Place an additional bet next to your original bet, then point with one finger</li>
+            <li><strong>Split:</strong> Place an equal bet next to your original bet, then make a "V" gesture with two fingers</li>
+            <li><strong>Surrender:</strong> Draw a line behind your bet with your finger (like crossing it out)</li>
+            <li><strong>Insurance:</strong> Place your insurance bet in the insurance box and say "insurance"</li>
+          </ul>
+          
           <h3>Winning</h3>
           <ul>
             <li>Blackjack (21 with first two cards): 3:2 payout</li>
