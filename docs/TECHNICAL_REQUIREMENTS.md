@@ -5,6 +5,10 @@
 ### 1. Project Overview
 A web-based blackjack training game designed to help players learn optimal blackjack strategy through interactive gameplay and educational features.
 
+**Live Site**: https://practiceblackjack.org  
+**Status**: Production - Fully deployed with CI/CD on Vercel  
+**Monetization**: Google AdSense enabled
+
 ### 2. Technology Stack
 
 #### Frontend
@@ -33,21 +37,32 @@ A web-based blackjack training game designed to help players learn optimal black
 - **Betting System**: Virtual currency with configurable limits
 
 #### Training Features
-- **Strategy Hints**: Real-time basic strategy recommendations (toggleable)
+- **Strategy Hints**: Real-time basic strategy recommendations (toggleable, Gameplay mode only)
 - **Strategy Grid**: Interactive visual strategy reference chart
 - **Basic Strategy Guide**: Comprehensive written strategy explanations
 - **Statistics Tracking**: Persistent tracking of wins, losses, pushes, blackjacks, busts, and total winnings
 - **Rule Explanations**: Detailed rules modal with special actions and casino hand signals
 - **Debug Mode**: Force split hands for testing and practice
+- **Drills Mode**: Rapid-fire multiple choice scenarios with 200+ unique situations
+  - Hard totals, soft totals, and pairs practice
+  - Immediate feedback with educational explanations
+  - Score tracking and streak counter
+  - Auto-filtered to remove obvious scenarios (e.g., 21)
 
 #### User Interface
 - **Responsive Design**: Mobile-first approach with full desktop support
+  - Hamburger menu for mobile navigation (<768px)
+  - Optimized card layouts for all screen sizes
+  - Adaptive footer spacing
 - **Accessibility**: WCAG 2.1 AA compliance with keyboard navigation
 - **Theme Support**: Automatic light/dark mode based on system preferences
 - **Animations**: Smooth card dealing and transitions (300-500ms)
-- **Modal System**: Reusable modals for Rules, Statistics, Settings, Strategy, Help
+- **Modal System**: Reusable modals for Rules, Statistics, Settings, Strategy, Help, About
+- **Dropdown Menus**: Mode selector and hamburger menu with proper UX
 - **Confirmation Dialogs**: User-friendly confirmation for destructive actions
 - **Visual Feedback**: Active hand indicators, win/lose badges, game phase display
+- **Card Design**: Simplified centered rank+suit display for clarity
+- **Win/Loss Display**: Explicit profit/loss and balance change per hand
 - **Split Hand Display**: Side-by-side split hands with individual bet tracking
 
 ### 4. Technical Architecture
