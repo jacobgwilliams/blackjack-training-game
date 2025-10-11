@@ -237,38 +237,42 @@ export function getDoubleDownRecommendation(
     [18, 1, 2, 3, 4, 5], // A,7 vs 2-6 (indices 1,2,3,4,5)
   ];
   
-  // Check hard totals
-  for (const [total, ...dealerValues] of hardDoubleDowns) {
-    if (playerTotal === total && dealerValues.includes(dealerValue)) {
-      const dealerIsWeak = ['4', '5', '6'].includes(dealerUpcard.rank);
-      let reasoning = '';
-      
-      if (total === 11) {
-        reasoning = `${total} is the best doubling hand. Dealer shows ${dealerUpcard.rank} - double your bet to maximize profit when you're favored`;
-      } else if (total === 10) {
-        reasoning = `${total} vs dealer ${dealerUpcard.rank} is a strong position. Many cards improve your hand - double to maximize profit`;
-      } else {
-        reasoning = `${total} vs weak dealer ${dealerUpcard.rank}. Dealer is likely to bust - double your bet to capitalize on their weakness`;
+  // Check hard totals (only if hand is NOT soft)
+  if (!playerHand.isSoft) {
+    for (const [total, ...dealerValues] of hardDoubleDowns) {
+      if (playerTotal === total && dealerValues.includes(dealerValue)) {
+        const dealerIsWeak = ['4', '5', '6'].includes(dealerUpcard.rank);
+        let reasoning = '';
+        
+        if (total === 11) {
+          reasoning = `${total} is the best doubling hand. Dealer shows ${dealerUpcard.rank} - double your bet to maximize profit when you're favored`;
+        } else if (total === 10) {
+          reasoning = `${total} vs dealer ${dealerUpcard.rank} is a strong position. Many cards improve your hand - double to maximize profit`;
+        } else {
+          reasoning = `${total} vs weak dealer ${dealerUpcard.rank}. Dealer is likely to bust - double your bet to capitalize on their weakness`;
+        }
+        
+        return {
+          action: 'double-down',
+          confidence: 98, // Higher than basic hit/stand to prioritize doubling when applicable
+          reasoning,
+          expectedValue: 0.2,
+        };
       }
-      
-      return {
-        action: 'double-down',
-        confidence: 98, // Higher than basic hit/stand to prioritize doubling when applicable
-        reasoning,
-        expectedValue: 0.2,
-      };
     }
   }
   
-  // Check soft totals
-  for (const [total, ...dealerValues] of softDoubleDowns) {
-    if (playerTotal === total && dealerValues.includes(dealerValue)) {
-      return {
-        action: 'double-down',
-        confidence: 96, // Higher than basic hit/stand to prioritize doubling when applicable
-        reasoning: `Soft ${total} vs dealer ${dealerUpcard.rank}. You can't bust with one card - double to maximize profit against the dealer's weak position`,
-        expectedValue: 0.15,
-      };
+  // Check soft totals (only if hand IS soft)
+  if (playerHand.isSoft) {
+    for (const [total, ...dealerValues] of softDoubleDowns) {
+      if (playerTotal === total && dealerValues.includes(dealerValue)) {
+        return {
+          action: 'double-down',
+          confidence: 96, // Higher than basic hit/stand to prioritize doubling when applicable
+          reasoning: `Soft ${total} vs dealer ${dealerUpcard.rank}. You can't bust with one card - double to maximize profit against the dealer's weak position`,
+          expectedValue: 0.15,
+        };
+      }
     }
   }
   
