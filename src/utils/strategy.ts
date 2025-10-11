@@ -251,7 +251,7 @@ export function getDoubleDownRecommendation(
       
       return {
         action: 'double-down',
-        confidence: 90,
+        confidence: 98, // Higher than basic hit/stand to prioritize doubling when applicable
         reasoning,
         expectedValue: 0.2,
       };
@@ -263,7 +263,7 @@ export function getDoubleDownRecommendation(
     if (playerTotal === total && dealerValues.includes(dealerValue)) {
       return {
         action: 'double-down',
-        confidence: 85,
+        confidence: 96, // Higher than basic hit/stand to prioritize doubling when applicable
         reasoning: `Soft ${total} vs dealer ${dealerUpcard.rank}. You can't bust with one card - double to maximize profit against the dealer's weak position`,
         expectedValue: 0.15,
       };
