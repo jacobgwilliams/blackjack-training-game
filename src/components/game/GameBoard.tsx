@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GameState, PlayerAction } from '../../types/game';
+import { GameState, PlayerAction, DebugScenario } from '../../types/game';
 import { Hand } from './Hand';
 import { Button } from '../ui/Button';
 import { useBlackjackStrategy } from '../../hooks/useBlackjackStrategy';
@@ -12,6 +12,7 @@ interface GameBoardProps {
   onDealerPlay: () => void;
   onDeal: () => void;
   showStrategyHints?: boolean;
+  trainingScenario?: DebugScenario;
 }
 
 export function GameBoard({
@@ -20,9 +21,10 @@ export function GameBoard({
   onDealerPlay,
   onDeal,
   showStrategyHints = true,
+  trainingScenario = 'none',
 }: GameBoardProps) {
   const dealerUpcard = gameState.dealerHand.cards[0] || null;
-  const strategy = useBlackjackStrategy(gameState.playerHand, dealerUpcard);
+  const strategy = useBlackjackStrategy(gameState.playerHand, dealerUpcard, trainingScenario);
   
   const canMakePlayerAction = gameState.phase === 'player-turn' && !gameState.playerHand.isBusted;
   const canStartDealerPlay = gameState.phase === 'dealer-turn';

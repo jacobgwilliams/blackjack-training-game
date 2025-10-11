@@ -202,6 +202,7 @@ function App() {
             onDealerPlay={handleDealerPlay}
             onDeal={handleDeal}
             showStrategyHints={showStrategyHints}
+            trainingScenario={debugScenario}
           />
         )}
       </main>

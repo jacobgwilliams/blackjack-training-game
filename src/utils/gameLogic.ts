@@ -61,8 +61,8 @@ export function dealInitialCards(gameState: GameState, debugMode?: { enabled: bo
     
     switch (debugMode.scenario) {
       case 'split': {
-        // Force a split opportunity (pair of 8s, 9s, or 10s)
-        const goodRanks = ['8', '9', '10', 'J', 'Q', 'K'];
+        // Force a split opportunity (pair of 8s or 9s - good split candidates, NOT 10s which should stand)
+        const goodRanks = ['8', '9', 'A']; // Avoid 10s (always stand on 20)
         const firstCardIndex = deckCopy.findIndex(card => goodRanks.includes(card.rank));
         
         if (firstCardIndex >= 0) {
@@ -120,10 +120,11 @@ export function dealInitialCards(gameState: GameState, debugMode?: { enabled: bo
       }
       
       case 'hit': {
-        // Force a hit scenario (player gets 12-16, dealer shows strong card)
+        // Force a hit scenario (player gets 12-16, dealer shows strong card 7-A)
         const findCard = (rank: string) => deckCopy.findIndex(card => card.rank === rank);
+        // Give player 10+3=13 or 10+2=12 (should hit vs 7-A)
         const card1Index = findCard('10');
-        const card2Index = findCard('4');
+        const card2Index = findCard('3');
         
         if (card1Index >= 0 && card2Index >= 0) {
           const card1 = deckCopy[card1Index];
@@ -134,8 +135,8 @@ export function dealInitialCards(gameState: GameState, debugMode?: { enabled: bo
           playerHand = addCardToHand(playerHand, card1);
           playerHand = addCardToHand(playerHand, card2);
           
-          // Give dealer a strong card (10 or A)
-          const dealerCard1Index = deckCopy.findIndex(card => card.rank === '10' || card.rank === 'A');
+          // Give dealer a strong card (7, 8, 9, 10, or A - NOT weak 2-6)
+          const dealerCard1Index = deckCopy.findIndex(card => ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'].includes(card.rank));
           if (dealerCard1Index >= 0) {
             const dealerCard1 = deckCopy[dealerCard1Index];
             deckCopy.splice(dealerCard1Index, 1);
