@@ -50,10 +50,10 @@ export function Header({
             {onToggleDrillsMode && (
               <Dropdown
                 options={[
-                  { value: 'gameplay', label: 'Gameplay', icon: '🎮' },
+                  { value: 'gameplay', label: 'Gameplay' },
                   { value: 'drills', label: 'Run Drills', icon: '🎯' }
                 ]}
-                value={isDrillsMode ? 'drills' : 'gameplay'}
+                value=""
                 onChange={(value) => {
                   if (value === 'drills' && !isDrillsMode) {
                     onToggleDrillsMode();
@@ -61,6 +61,7 @@ export function Header({
                     onToggleDrillsMode();
                   }
                 }}
+                placeholder="Modes"
                 className="header-mode-dropdown"
               />
             )}
@@ -95,17 +96,6 @@ export function Header({
                 className="header-nav-button"
               >
                 {showStrategyHints ? 'Hide Hints' : 'Show Hints'}
-              </Button>
-            )}
-            
-            {onShowRules && (
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={onShowRules}
-                className="header-nav-button"
-              >
-                Rules
               </Button>
             )}
             
