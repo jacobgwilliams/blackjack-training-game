@@ -17,7 +17,6 @@ interface HeaderProps {
 }
 
 export function Header({
-  onShowRules,
   onShowStatistics,
   onShowSettings,
   onResetGame,

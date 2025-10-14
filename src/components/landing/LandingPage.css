@@ -1,0 +1,254 @@
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.landing-content {
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.balance-display {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.balance-amount {
+  font-weight: 600;
+  color: var(--accent-primary);
+  font-size: 1.25rem;
+}
+
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.125rem;
+}
+
+.stat-value.positive {
+  color: var(--success-color);
+}
+
+.stat-value.negative {
+  color: var(--error-color);
+}
+
+.stat-detail {
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+}
+
+.last-run-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.last-run-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.last-run-card {
+  background: var(--bg-secondary);
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+}
+
+.run-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.run-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.run-profit {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.run-profit.positive {
+  color: var(--success-color);
+}
+
+.run-profit.negative {
+  color: var(--error-color);
+}
+
+.run-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.run-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.run-stat-label {
+  color: var(--text-secondary);
+}
+
+.run-stat-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+.start-run-button {
+  min-width: 180px;
+  font-size: 1rem;
+  padding: 0.875rem 1.5rem;
+}
+
+.view-stats-button {
+  min-width: 160px;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.quick-tips {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.quick-tips h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.quick-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.quick-tips li {
+  padding: 0.25rem 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.quick-tips li::before {
+  content: "💡";
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .landing-page {
+    padding: 1rem;
+  }
+  
+  .welcome-section h1 {
+    font-size: 2rem;
+  }
+  
+  .stats-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .start-run-button,
+  .view-stats-button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .run-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .run-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .run-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}

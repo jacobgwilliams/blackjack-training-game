@@ -1,6 +1,8 @@
 import { Hand, Deck } from './card';
 
 export type GamePhase = 
+  | 'landing' 
+  | 'run-complete'
   | 'waiting' 
   | 'betting' 
   | 'dealing' 
@@ -75,6 +77,22 @@ export interface GameSettings {
   };
 }
 
+export interface RunStatistics {
+  runId: string;
+  startTime: number;
+  endTime?: number;
+  handsPlayed: number;
+  handsWon: number;
+  handsLost: number;
+  handsPushed: number;
+  netProfit: number;
+  startingBalance: number;
+  endingBalance: number;
+  blackjacks: number;
+  busts: number;
+  isActive: boolean;
+}
+
 export interface PlayerStatistics {
   gamesPlayed: number;
   gamesWon: number;
@@ -86,6 +104,10 @@ export interface PlayerStatistics {
   averageHandValue: number;
   blackjacks: number;
   busts: number;
+  // Run tracking
+  totalRuns: number;
+  activeRun?: RunStatistics;
+  runHistory: RunStatistics[];
 }
 
 export interface StrategyRecommendation {

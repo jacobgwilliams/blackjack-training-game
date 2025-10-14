@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Card, Hand } from '../../types/card';
+import { Card } from '../../types/card';
 import { generateAllScenarios, getRandomScenario, DrillScenario } from '../../utils/scenarioGenerator';
 import { Button } from '../ui/Button';
 import './DrillsMode.css';

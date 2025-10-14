@@ -11,7 +11,7 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
   gap: 1rem;
@@ -25,7 +25,7 @@
 
 .header-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #f9fafb;
   display: flex;
@@ -34,7 +34,7 @@
 }
 
 .header-title-icon {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .header-center {

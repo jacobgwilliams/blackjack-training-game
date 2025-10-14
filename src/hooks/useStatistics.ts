@@ -95,6 +95,8 @@ export function useStatistics() {
       averageHandValue: 0,
       blackjacks: 0,
       busts: 0,
+      totalRuns: 0,
+      runHistory: [],
     });
   }, []);
   

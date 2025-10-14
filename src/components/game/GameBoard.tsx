@@ -12,6 +12,7 @@ interface GameBoardProps {
   onDeal: () => void;
   showStrategyHints?: boolean;
   trainingScenario?: DebugScenario;
+  onEndRun?: () => void;
 }
 
 export function GameBoard({
@@ -20,6 +21,7 @@ export function GameBoard({
   onDeal,
   showStrategyHints = true,
   trainingScenario = 'none',
+  onEndRun,
 }: GameBoardProps) {
   const dealerUpcard = gameState.dealerHand.cards[0] || null;
   const strategy = useBlackjackStrategy(gameState.playerHand, dealerUpcard, trainingScenario);
@@ -256,12 +258,23 @@ export function GameBoard({
             <div className={`game-result game-result--${getResultColor()}`}>
               {getGameResultMessage()}
             </div>
-            <Button
-              variant="primary"
-              onClick={onDeal}
-            >
-              Deal
-            </Button>
+            <div className="game-over-buttons">
+              <Button
+                variant="primary"
+                onClick={onDeal}
+              >
+                Deal
+              </Button>
+              {onEndRun && (
+                <Button
+                  variant="secondary"
+                  onClick={onEndRun}
+                  className="end-run-button"
+                >
+                  End Run
+                </Button>
+              )}
+            </div>
           </div>
         )}
         

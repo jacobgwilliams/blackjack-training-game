@@ -1,40 +1,62 @@
-# Blackjack Training Game
+# AI Newsletter App
 
-A web-based blackjack training game designed to help players learn optimal blackjack strategy through interactive gameplay and educational features.
+A modern, AI-powered newsletter application built with React, TypeScript, and Tailwind CSS. This application helps you research, compose, and send newsletters with the assistance of artificial intelligence.
 
 ## Features
 
-### Core Game Features
-- **Complete Blackjack Implementation**: Full blackjack rules with proper card dealing and hand evaluation
-- **Strategy Training**: Real-time basic strategy recommendations and hints
-- **Statistics Tracking**: Track your performance, win rate, and strategy adherence
-- **Multiple Betting Options**: Flexible betting system with different amounts
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+### 🤖 AI-Powered Content Generation
+- **Research Assistant**: AI researches topics and generates comprehensive content
+- **Content Generation**: Automatically create newsletter content based on topics
+- **Smart Suggestions**: Get AI-powered suggestions for headlines and content structure
 
-### Educational Features
-- **Basic Strategy Hints**: Get recommendations for optimal play
-- **Probability Calculator**: See the odds for different actions
-- **Interactive Tutorial**: Learn blackjack rules and strategy
-- **Performance Analytics**: Track your improvement over time
+### 📧 Newsletter Management
+- **Rich Editor**: Create and edit newsletters with a modern interface
+- **Template System**: Use pre-built templates or create custom ones
+- **Draft Management**: Save and manage multiple newsletter drafts
+- **Scheduling**: Schedule newsletters for future delivery
 
-### Technical Features
-- **Modern React**: Built with React 18 and TypeScript
-- **Fast Performance**: Optimized with Vite for quick loading
-- **Accessibility**: WCAG 2.1 AA compliant with keyboard navigation
-- **Progressive Web App**: Can be installed on mobile devices
+### 👥 Subscriber Management
+- **Subscriber Database**: Manage your subscriber list with detailed profiles
+- **Tagging System**: Organize subscribers with custom tags
+- **Import/Export**: Easily import and export subscriber lists
+- **Unsubscribe Management**: Handle unsubscribes automatically
+
+### 📊 Analytics & Insights
+- **Performance Metrics**: Track open rates, click rates, and engagement
+- **Growth Analytics**: Monitor subscriber growth over time
+- **Newsletter Performance**: Compare performance across different newsletters
+- **Visual Charts**: Beautiful charts and graphs for data visualization
+
+### ⚙️ Settings & Configuration
+- **Email Provider Integration**: Connect with SMTP, SendGrid, Mailgun, or Amazon SES
+- **AI Configuration**: Set up OpenAI API for AI features
+- **Customization**: Customize newsletter appearance and branding
+
+## Tech Stack
+
+- **Frontend**: React 18, TypeScript, Tailwind CSS
+- **Routing**: React Router DOM
+- **Icons**: Lucide React
+- **Charts**: Recharts
+- **Forms**: React Hook Form
+- **Notifications**: React Hot Toast
+- **Build Tool**: Vite
+- **AI Integration**: OpenAI API (configurable)
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 16+ 
 - npm or yarn
+- OpenAI API key (for AI features)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd blackjack-training-game
+cd ai-newsletter-app
 ```
 
 2. Install dependencies:
@@ -42,118 +64,108 @@ cd blackjack-training-game
 npm install
 ```
 
-3. Start the development server:
+3. Create environment file:
+```bash
+cp .env.example .env
+```
+
+4. Configure your environment variables:
+```env
+VITE_OPENAI_API_KEY=your_openai_api_key_here
+VITE_EMAIL_PROVIDER=smtp
+VITE_SMTP_HOST=your_smtp_host
+VITE_SMTP_PORT=587
+VITE_SMTP_USERNAME=your_smtp_username
+VITE_SMTP_PASSWORD=your_smtp_password
+```
+
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+6. Open your browser and navigate to `http://localhost:3000`
 
-### Available Scripts
+## Usage
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run test` - Run tests
-- `npm run test:watch` - Run tests in watch mode
-- `npm run test:coverage` - Run tests with coverage
+### Creating Your First Newsletter
 
-## Game Rules
+1. Navigate to the Newsletter Editor
+2. Enter a research topic in the AI Research Assistant panel
+3. Click "Research & Generate" to let AI research and create content
+4. Review and edit the generated content
+5. Add a compelling title
+6. Save as draft or send immediately
 
-### Basic Blackjack Rules
-- **Objective**: Get as close to 21 as possible without going over
-- **Card Values**: 
-  - Number cards (2-10): Face value
-  - Face cards (J, Q, K): 10 points
-  - Ace: 1 or 11 points (whichever is better)
-- **Winning**: Beat the dealer's hand without busting
-- **Blackjack**: 21 with first two cards (3:2 payout)
-- **Dealer Rules**: Must hit on 16, stand on 17
+### Managing Subscribers
 
-### Special Actions
-- **Double Down**: Double your bet and take exactly one more card
-- **Split**: Split pairs into two separate hands
-- **Surrender**: Give up half your bet and end the hand
-- **Insurance**: Side bet against dealer blackjack
+1. Go to the Subscribers page
+2. Add subscribers manually or import from CSV
+3. Use tags to organize your subscriber base
+4. Track engagement and activity
 
-## Strategy
+### Viewing Analytics
 
-The game implements basic strategy recommendations based on mathematical analysis:
+1. Visit the Analytics page
+2. View key metrics and performance charts
+3. Track subscriber growth over time
+4. Analyze newsletter performance
 
-- **Hard Totals**: Hit/stand decisions based on your total and dealer's upcard
-- **Soft Totals**: Decisions for hands with Ace counted as 11
-- **Pairs**: When to split pairs for optimal play
-- **Insurance**: Mathematical decision based on remaining cards
+## Configuration
 
-## Architecture
+### AI Integration
 
-### Project Structure
+To enable AI features, you'll need an OpenAI API key:
+
+1. Get an API key from [OpenAI](https://platform.openai.com/api-keys)
+2. Add it to your environment variables
+3. The AI features will be automatically enabled
+
+### Email Provider Setup
+
+The app supports multiple email providers:
+
+- **SMTP**: Configure with your SMTP server details
+- **SendGrid**: Use SendGrid API
+- **Mailgun**: Use Mailgun API
+- **Amazon SES**: Use AWS SES
+
+Configure your preferred provider in the Settings page.
+
+## Project Structure
+
 ```
 src/
-├── components/
-│   ├── game/          # Game-specific components
-│   ├── ui/            # Reusable UI components
-│   └── layout/        # Layout components
-├── hooks/             # Custom React hooks
-├── utils/             # Utility functions
-├── types/             # TypeScript type definitions
-└── constants/         # Game constants and configuration
+├── components/          # Reusable UI components
+├── pages/              # Page components
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── types/              # TypeScript type definitions
+├── data/               # Mock data and constants
+└── App.tsx             # Main application component
 ```
-
-### Key Components
-- **GameBoard**: Main game interface
-- **Card**: Individual card component with animations
-- **Hand**: Hand display with totals and status
-- **Strategy Hints**: Real-time strategy recommendations
-
-### State Management
-- **useGameState**: Manages game state and actions
-- **useBlackjackStrategy**: Provides strategy recommendations
-- **useStatistics**: Tracks player performance
-
-## Testing
-
-The project includes comprehensive testing:
-
-- **Unit Tests**: Game logic and utility functions
-- **Component Tests**: React component behavior
-- **Integration Tests**: User interactions and game flow
-
-Run tests with:
-```bash
-npm run test
-```
-
-## Performance
-
-- **Bundle Size**: < 500KB gzipped
-- **Loading Time**: < 2 seconds on 3G
-- **Runtime**: 60fps animations
-- **Memory**: < 50MB for game session
-
-## Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-- Mobile browsers (iOS Safari, Chrome Mobile)
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests for new functionality
+4. Add tests if applicable
 5. Submit a pull request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## Support
 
-- Basic strategy tables based on mathematical analysis
-- Card designs inspired by traditional playing cards
-- Accessibility guidelines from WCAG 2.1 AA
+For support and questions, please open an issue in the GitHub repository.
+
+## Roadmap
+
+- [ ] Advanced AI content customization
+- [ ] A/B testing for newsletters
+- [ ] Advanced analytics and reporting
+- [ ] Multi-language support
+- [ ] Mobile app
+- [ ] API for third-party integrations

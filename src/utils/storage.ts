@@ -2,6 +2,8 @@
  * LocalStorage utility for persisting game data
  */
 
+import { RunStatistics } from '../types/game';
+
 const STORAGE_KEYS = {
   BALANCE: 'blackjack_balance',
   STATISTICS: 'blackjack_statistics',
@@ -15,6 +17,8 @@ export interface StoredStatistics {
   blackjacks: number;
   busts: number;
   totalWinnings: number;
+  totalRuns?: number;
+  runHistory?: RunStatistics[];
 }
 
 /**

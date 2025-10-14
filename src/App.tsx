@@ -3,6 +3,8 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { GameBoard } from './components/game/GameBoard';
 import { DrillsMode } from './components/drills/DrillsMode';
+import { LandingPage } from './components/landing/LandingPage';
+import { RunComplete } from './components/landing/RunComplete';
 import { Modal } from './components/ui/Modal';
 import { Button } from './components/ui/Button';
 import { ConfirmModal } from './components/ui/ConfirmModal';
@@ -37,13 +39,10 @@ function App() {
     },
   }), [debugScenario, shoeSize]);
   
-  const { gameState, statistics, actions } = useGameState(gameSettings);
+  const { gameState, statistics, lastCompletedRun, actions } = useGameState(gameSettings);
   const lastProcessedResult = useRef<string | null>(null);
   
-  // Initialize game on mount
-  useEffect(() => {
-    actions.initializeNewGame();
-  }, []); // Empty dependency array - only run once on mount
+  // Don't auto-initialize game - start on landing page
   
   // Update statistics when game ends
   useEffect(() => {
@@ -84,15 +83,6 @@ function App() {
     }
   };
   
-  const handleDealerPlay = () => {
-    try {
-      console.log('Dealer play - Current game state:', gameState);
-      actions.dealerPlay();
-    } catch (error) {
-      console.error('Error in dealer play:', error);
-      actions.newGame();
-    }
-  };
   
   const handleResetGameClick = () => {
     setShowResetConfirm(true);
@@ -162,6 +152,19 @@ function App() {
       <main className="app-main">
         {isDrillsMode ? (
           <DrillsMode onExitDrills={() => setIsDrillsMode(false)} />
+        ) : gameState.phase === 'landing' ? (
+          <LandingPage
+            statistics={statistics}
+            onStartRun={actions.startRun}
+            onViewStatistics={() => setShowStatistics(true)}
+          />
+        ) : gameState.phase === 'run-complete' && lastCompletedRun ? (
+          <RunComplete
+            completedRun={lastCompletedRun}
+            onReturnToLanding={actions.returnToLanding}
+            onStartNewRun={actions.startRun}
+            onTryDrills={() => setIsDrillsMode(true)}
+          />
         ) : (
           <>
             {gameState.phase === 'betting' && (
@@ -169,6 +172,12 @@ function App() {
             <div className="betting-content">
               <h2>Place Your Bet</h2>
               <p>Current Balance: ${gameState.playerScore}</p>
+              {statistics.activeRun && (
+                <div className="run-info">
+                  <p>Run Progress: {statistics.activeRun.handsPlayed} hands played</p>
+                  <p>Run Profit: {statistics.activeRun.netProfit >= 0 ? '+' : ''}${statistics.activeRun.netProfit}</p>
+                </div>
+              )}
               <div className="betting-options">
                 <Button
                   variant="primary"
@@ -199,6 +208,17 @@ function App() {
                   $100
                 </Button>
               </div>
+              {statistics.activeRun && (
+                <div className="run-actions">
+                  <Button
+                    variant="secondary"
+                    onClick={actions.endRun}
+                    className="end-run-button"
+                  >
+                    End Run
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -211,6 +231,7 @@ function App() {
             onDeal={handleDeal}
             showStrategyHints={showStrategyHints}
             trainingScenario={debugScenario}
+            onEndRun={statistics.activeRun ? actions.endRun : undefined}
           />
         )}
           </>
