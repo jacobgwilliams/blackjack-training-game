@@ -4,13 +4,13 @@
   
   width: var(--card-width);
   aspect-ratio: var(--card-aspect-ratio);
-  border-radius: 0.375rem;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #cbd5e1;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -36,8 +36,8 @@
 }
 
 .card--hidden {
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  border: 1px solid #4b5563;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  border: 1px solid #3b82f6;
 }
 
 .card-front {
@@ -56,8 +56,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  border-radius: 0.375rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  border-radius: 0.5rem;
 }
 
 .card-back-pattern {
@@ -101,7 +101,7 @@
 
 .card--black .card-rank,
 .card--black .card-suit {
-  color: #1f2937;
+  color: #111827;
 }
 
 /* Responsive */

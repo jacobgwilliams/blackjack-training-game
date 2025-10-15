@@ -27,27 +27,25 @@
 
 /* Variants */
 .btn--primary {
-  background-color: #dc2626;
+  background-color: #3b82f6;
   color: white;
-  border: 1px solid #b91c1c;
 }
 
 .btn--primary:hover:not(:disabled) {
-  background-color: #b91c1c;
+  background-color: #2563eb;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 .btn--secondary {
-  background-color: #374151;
+  background-color: #6b7280;
   color: white;
-  border: 1px solid #4b5563;
 }
 
 .btn--secondary:hover:not(:disabled) {
   background-color: #4b5563;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.4);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
 }
 
 .btn--danger {
@@ -62,15 +60,14 @@
 }
 
 .btn--success {
-  background-color: #16a34a;
+  background-color: #10b981;
   color: white;
-  border: 1px solid #15803d;
 }
 
 .btn--success:hover:not(:disabled) {
-  background-color: #15803d;
+  background-color: #059669;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 /* Sizes */
