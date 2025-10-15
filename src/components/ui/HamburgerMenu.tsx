@@ -68,7 +68,7 @@ export function HamburgerMenu({
               onClick={() => handleAction(onResetGame)}
               className="hamburger-menu-item"
             >
-              Reset Game
+              Reset Balance
             </Button>
           )}
 

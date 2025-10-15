@@ -83,7 +83,7 @@ export function Header({
                 onClick={onResetGame}
                 className="header-nav-button"
               >
-                Reset Game
+                Reset Balance
               </Button>
             )}
             
